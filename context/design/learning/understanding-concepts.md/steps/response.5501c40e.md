@@ -1,7 +1,9 @@
+---
+timestamp: 'Fri Oct 10 2025 09:27:01 GMT-0400 (Eastern Daylight Time)'
+parent: '[[../20251010_092701.ed8ee76a.md]]'
+content_id: 5501c40e8a219040742b3714057f6992a8c44e0bd5c7f7b66dbe31273bac258f
+---
 
-[@concept-design-overview](../background/concept-design-overview.md)
-
-# Question: How do I write a concept using an LLM?
 # response:
 
 To write a "Concept Design" using an LLM, you need to provide the LLM with a clear understanding of what a "concept" is according to your definition, and then guide it through the structured creation of a specific concept.
@@ -10,7 +12,7 @@ The key is to leverage the LLM's ability to understand context, generate structu
 
 Here's a step-by-step guide and a detailed prompt structure:
 
----
+***
 
 ## Guide for Writing a Concept using an LLM
 
@@ -31,9 +33,10 @@ Now, acting as an expert "Concept Designer" following these principles, I need y
 Think about what specific functionality you want to encapsulate. Give the LLM a high-level idea.
 
 **Example Ideas:**
-*   "A way for users to create and manage personal to-do lists."
-*   "A system for tracking friend relationships between users."
-*   "A concept for managing events and attendee RSVPs."
+
+* "A way for users to create and manage personal to-do lists."
+* "A system for tracking friend relationships between users."
+* "A concept for managing events and attendee RSVPs."
 
 ### Step 3: Use a Structured Prompt Template
 
@@ -81,13 +84,13 @@ Please define the following concept, ensuring it strictly adheres to the princip
 
 Once the LLM generates its first attempt, review it critically against the principles in your original text. Don't hesitate to ask follow-up questions or request revisions:
 
-*   "Could you elaborate on how the `[Action Name]` prevents `[specific problem]`?"
-*   "I think `[Property]` is too much information for this concept. Could you remove it and explain why it's not needed?"
-*   "The `[Action Name]` seems to imply a dependency on `[Another Concept]`. How can we refactor it to ensure completeness within *this* concept?"
-*   "Is the `[Object]` definition sufficiently polymorphic? How could it be more general?"
-*   "Can you give an example of a `sync` that would involve this concept and another related concept like `UserAuthentication`?" (This tests its understanding of how concepts interact *externally*.)
+* "Could you elaborate on how the `[Action Name]` prevents `[specific problem]`?"
+* "I think `[Property]` is too much information for this concept. Could you remove it and explain why it's not needed?"
+* "The `[Action Name]` seems to imply a dependency on `[Another Concept]`. How can we refactor it to ensure completeness within *this* concept?"
+* "Is the `[Object]` definition sufficiently polymorphic? How could it be more general?"
+* "Can you give an example of a `sync` that would involve this concept and another related concept like `UserAuthentication`?" (This tests its understanding of how concepts interact *externally*.)
 
----
+***
 
 ## Example: Designing a `ToDoList` Concept with an LLM
 

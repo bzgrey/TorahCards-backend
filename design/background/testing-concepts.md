@@ -42,3 +42,5 @@ Use the Deno.test framework, splitting by appropriate test steps and describing 
 import { assertEquals } from "jsr:@std/assert"; // or any other utility from the library
 ```
 
+# Testing notes:
+- Each test should be a separate Deno.test block, not within one
