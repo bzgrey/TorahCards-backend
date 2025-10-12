@@ -133,10 +133,10 @@ Deno.test("addCard: should allow different users to have flashcards with the sam
     const addResult1 = await flashCardsConcept.addFlashcards({
       user: testUser1,
       name: topicName,
-      cards: [{ 
-      question: user1Card.question,
-      answer: user1Card.answer,
-      }]
+      cards: [{
+        question: user1Card.question,
+        answer: user1Card.answer,
+      }],
     });
     assertEquals(addResult1, {});
 
@@ -147,7 +147,7 @@ Deno.test("addCard: should allow different users to have flashcards with the sam
       cards: [{
         question: user2Card.question,
         answer: user2Card.answer,
-      }]
+      }],
     });
     assertEquals(addResult2, {});
 
@@ -155,3 +155,123 @@ Deno.test("addCard: should allow different users to have flashcards with the sam
     const user1Flashcards = await flashCardsConcept._getCards({
       user: testUser1,
       name: topicName,
+    });
+    assert(user1Flashcards && !("error" in user1Flashcards));
+    assertEquals(user1Flashcards.cards.length, 1);
+    assertEquals(user1Flashcards.cards[0].question, user1Card.question);
+
+    // Retrieve and verify User 2's flashcards
+    const user2Flashcards = await flashCardsConcept._getCards({
+      user: testUser2,
+      name: topicName,
+    });
+    assert(user2Flashcards && !("error" in user2Flashcards));
+    assertEquals(user2Flashcards.cards.length, 1);
+    assertEquals(user2Flashcards.cards[0].question, user2Card.question);
+  } finally {
+    await client.close();
+  }
+});
+
+Deno.test("FlashCards Concept - Basic addFlashcards and _getUserCards", async (t) => {
+  const [db, client] = await testDb();
+  const flashCardsConcept = new FlashCardsConcept(db);
+
+  try {
+    const topic1 = "History Facts";
+    const topic2 = "Math Formulas";
+
+    await t.step("Add first flashcard set for user 1", async () => {
+      const result = await flashCardsConcept.addFlashcards({
+        user: testUser1,
+        name: topic1,
+        cards: [{ question: "WWI Start?", answer: "1914" }],
+      });
+      assertEquals(result, {});
+    });
+
+    await t.step("Add second flashcard set for user 1", async () => {
+      const result = await flashCardsConcept.addFlashcards({
+        user: testUser1,
+        name: topic2,
+        cards: [{
+          question: "Pythagorean theorem?",
+          answer: "a^2 + b^2 = c^2",
+        }],
+      });
+      assertEquals(result, {});
+    });
+
+    await t.step("Retrieve all flashcard sets for user 1", async () => {
+      const userCards = await flashCardsConcept._getUserCards({
+        user: testUser1,
+      });
+      assertEquals(userCards.length, 2);
+      const names = userCards.map((fcs) => fcs.name);
+      assertArrayIncludes(names, [topic1, topic2]);
+    });
+
+    await t.step("Add a flashcard set for user 2", async () => {
+      const result = await flashCardsConcept.addFlashcards({
+        user: testUser2,
+        name: "User2 Topic",
+        cards: [{ question: "User2 Q", answer: "User2 A" }],
+      });
+      assertEquals(result, {});
+    });
+
+    await t.step(
+      "Verify user 1's cards are isolated from user 2's",
+      async () => {
+        const user1Cards = await flashCardsConcept._getUserCards({
+          user: testUser1,
+        });
+        assertEquals(user1Cards.length, 2); // Should still be 2 for user 1
+        const user2Cards = await flashCardsConcept._getUserCards({
+          user: testUser2,
+        });
+        assertEquals(user2Cards.length, 1); // Should be 1 for user 2
+      },
+    );
+  } finally {
+    await client.close();
+  }
+});
+
+Deno.test("FlashCards Concept - removeFlashCards", async (t) => {
+  const [db, client] = await testDb();
+  const flashCardsConcept = new FlashCardsConcept(db);
+
+  try {
+    const topicName = "Ephemeral Topic";
+    await flashCardsConcept.addFlashcards({
+      user: testUser1,
+      name: topicName,
+      cards: [{ question: "Q1", answer: "A1" }],
+    });
+
+    await t.step("Remove an existing flashcard set", async () => {
+      const removeResult = await flashCardsConcept.removeFlashCards({
+        user: testUser1,
+        name: topicName,
+      });
+      assertEquals(removeResult, {}); // Expect success
+
+      const retrievedFlashcards = await flashCardsConcept._getCards({
+        user: testUser1,
+        name: topicName,
+      });
+      assert(retrievedFlashcards && "error" in retrievedFlashcards); // Expect error as it's removed
+    });
+
+    await t.step("Attempt to remove a non-existent flashcard set", async () => {
+      const removeResult = await flashCardsConcept.removeFlashCards({
+        user: testUser1,
+        name: "NonExistent",
+      });
+      assert(removeResult && "error" in removeResult); // Expect error
+    });
+  } finally {
+    await client.close();
+  }
+});

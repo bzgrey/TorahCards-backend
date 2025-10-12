@@ -1,0 +1,2 @@
+-  I removed labeling from the concept. I will handle that through syncs with the labeling concept
+- I added two query actions
