@@ -134,12 +134,26 @@
             }
           },
           {
+            "id": "cb259b035aed5e9a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "design/concepts/Following/implementation.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "implementation"
+            }
+          },
+          {
             "id": "51672dc5eca5748e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "design/learning/design-changes.md",
+                "file": "design/concepts/Following/design-changes.md",
                 "mode": "source",
                 "source": false
               },
@@ -148,20 +162,35 @@
             }
           },
           {
+            "id": "fa1f1a1f6cfe0078",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "context/design/concepts/Following/implementation.md/steps/fix.9bcc5318.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "fix.9bcc5318"
+            }
+          },
+          {
             "id": "b25201f72574ead9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "context/design/concepts/Notes/implementation.md/steps/response.435415f0.md",
+                "file": "design/learning/design-changes and interesting moments.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "response.435415f0"
+              "title": "design-changes and interesting moments"
             }
           }
-        ]
+        ],
+        "currentTab": 12
       }
     ],
     "direction": "vertical"
@@ -309,43 +338,43 @@
       "bases:Create new base": false
     }
   },
-  "active": "d29aa2b3819f9011",
+  "active": "b25201f72574ead9",
   "lastOpenFiles": [
+    "context/design/concepts/Following/implementation.md/steps/fix.9bcc5318.md",
+    "design/learning/design-changes and interesting moments.md",
+    "design/concepts/Following/implementation.md",
+    "design/concepts/Following/design-changes.md",
+    "design/concepts/Labeling/implementation.md",
+    "design/concepts/Following/testing output.md",
+    "design/concepts/Following/testing.md",
+    "context/design/concepts/Following/testing.md/20251016_151111.380b293c.md",
+    "context/design/concepts/Following/testing.md/steps/file.c394de41.md",
+    "context/design/concepts/Following/testing.md/steps/response.9254ab91.md",
+    "context/design/concepts/Following/testing.md/20251016_151048.10acd7dc.md",
+    "context/design/concepts/Following/testing.md/steps/problem.c8c968cd.md",
+    "context/design/concepts/Following/testing.md/steps/fix.9bcc5318.md",
     "design/concepts/Labeling/testing.md",
-    "design/concepts/Labeling/testing output.md",
-    "design/concepts/Labeling/design-changes.md",
-    "design/concepts/Labeling/Labeling.md",
+    "context/design/concepts/Notes/implementation.md/steps/file.b8c212b6.md",
+    "context/design/concepts/Following/implementation.md/steps/response.f3a1cd3b.md",
+    "context/design/concepts/Following/implementation.md/20251016_150850.dd40406b.md",
+    "context/design/concepts/Following/testing.md/20251016_144513.8e81b348.md",
+    "design/concepts/FlashCards/implementation.md",
     "context/design/concepts/Notes/implementation.md/steps/response.435415f0.md",
-    "design/concepts/FlashCards/Flashcards.md",
     "design/concepts/Notes/design-changes.md",
-    "context/design/concepts/Labeling/testing.md/20251013_111201.1fdd7845.md",
-    "context/design/concepts/Labeling/testing.md/steps/file.9d0019f6.md",
-    "context/design/concepts/Labeling/testing.md/steps/response.457457bb.md",
-    "context/design/concepts/Labeling/testing.md/20251013_111103.ffdae5ae.md",
-    "context/design/concepts/Labeling/testing.md/steps/problem.13402b56.md",
-    "src/concepts/Labeling/LabelingConcept.test.ts",
-    "context/design/concepts/Labeling/testing.md/20251012_210752.ac2e4e66.md",
-    "context/design/concepts/Labeling/testing.md/steps/file.f4433c21.md",
-    "context/design/concepts/Labeling/testing.md/steps/solution.04f9f2db.md",
-    "context/design/concepts/Labeling/testing.md/steps/response.9b65167f.md",
-    "context/design/concepts/Labeling/testing.md/20251012_210714.c0088bb4.md",
-    "context/design/concepts/Labeling/testing.md/steps/file.0072cbb1.md",
-    "context/design/concepts/Labeling/testing.md/steps/problem.b4458a7f.md",
-    "context/src/concepts/Labeling/LabelingConcept.ts/20251012_210621.0072cbb1.md",
-    "design/concepts/FlashCards/testing.md",
-    "context/src/concepts/Labeling/LabelingConcept.ts/20251012_204352.66a241a8.md",
-    "context/design/concepts/Labeling/testing.md/20251012_205154.05653374.md",
-    "context/design/concepts/Labeling/testing.md/steps/trace.09dd98eb.md",
-    "context/design/concepts/Labeling/testing.md/steps/file.dd2666a5.md",
-    "context/design/concepts/Labeling/testing.md/steps/file.f9173251.md",
-    "context/design/concepts/Labeling/testing.md/steps",
-    "context/src/concepts/Labeling/LabelingConcept.ts",
-    "context/src/concepts/Labeling",
-    "src/concepts/Labeling/LabelingConcept.ts",
-    "src/concepts/Labeling",
-    "context/design/concepts/Labeling/implementing.md/steps",
-    "context/design/concepts/Labeling",
-    "design/concepts/Labeling",
-    "context/design/concepts/FlashCards/test-output.md/steps"
+    "src/concepts/Following/FollowingConcept.test.ts",
+    "context/design/concepts/Following/testing.md/steps/file.1d0b2717.md",
+    "context/design/concepts/Following/testing.md/steps/response.296e4931.md",
+    "context/design/concepts/Following/testing.md/20251016_144449.3dd0e2fc.md",
+    "context/design/concepts/Following/testing.md/steps/problem.5e17b19c.md",
+    "context/design/concepts/Notes/testing.md/steps/file.f3ff82d7.md",
+    "context/design/concepts/Following/testing.md/steps",
+    "src/concepts/Following/FollowingConcept.ts",
+    "src/concepts/Following",
+    "context/design/concepts/Following/implementation.md/steps",
+    "context/design/concepts/Following/Following.md/steps",
+    "context/design/concepts/Following",
+    "design/concepts/Following",
+    "context/design/concepts/Labeling/Labeling.md/steps",
+    "design/concepts/Untitled"
   ]
 }
