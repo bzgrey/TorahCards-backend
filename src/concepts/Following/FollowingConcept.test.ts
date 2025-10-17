@@ -26,7 +26,7 @@ Deno.test("FollowingConcept: follow - successfully follows an item for a new use
   const result = await concept.follow({ user: userAlice, item: itemPost1 });
   assertEquals(result, {}); // Expect success
   const followedItems = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(followedItems, [itemPost1]);
+  assertArrayIncludes(followedItems, [{ item: itemPost1 }]);
 
   await client.close();
 });
@@ -40,7 +40,9 @@ Deno.test("FollowingConcept: follow - successfully follows another item for an e
   const result = await concept.follow({ user: userAlice, item: itemPost2 });
   assertEquals(result, {}); // Expect success
   const followedItems = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(followedItems, [itemPost1, itemPost2]);
+  assertArrayIncludes(followedItems, [{ item: itemPost1 }, {
+    item: itemPost2,
+  }]);
 
   await client.close();
 });
@@ -72,7 +74,7 @@ Deno.test("FollowingConcept: follow - successfully follows an item for a differe
   const result = await concept.follow({ user: userBob, item: itemPost1 });
   assertEquals(result, {}); // Expect success
   const followedItems = await concept._getFollowedItems({ user: userBob });
-  assertArrayIncludes(followedItems, [itemPost1]);
+  assertArrayIncludes(followedItems, [{ item: itemPost1 }]);
 
   await client.close();
 });
@@ -90,8 +92,8 @@ Deno.test("FollowingConcept: unfollow - successfully unfollows an item", async (
   assertEquals(result, {}); // Expect success
   const followedItems = await concept._getFollowedItems({ user: userAlice });
   assertEquals(followedItems.length, 1);
-  assertArrayIncludes(followedItems, [itemPost2]);
-  assertEquals(followedItems.includes(itemPost1), false);
+  assertArrayIncludes(followedItems, [{ item: itemPost2 }]);
+  assertEquals(followedItems.some((f) => f.item === itemPost1), false);
 
   await client.close();
 });
@@ -164,27 +166,27 @@ Deno.test("FollowingConcept: scenario - follow, unfollow, then follow the same i
   const [db, client] = await testDb();
   const concept = new FollowingConcept(db);
   let result: Empty | { error: string };
-  let followedItems: ID[];
+  let followedItems: Array<{ item: ID }>;
 
   // 1. Alice follows itemPost3
   result = await concept.follow({ user: userAlice, item: itemPost3 });
   assertEquals(result, {});
   followedItems = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(followedItems, [itemPost3]);
+  assertArrayIncludes(followedItems, [{ item: itemPost3 }]);
   assertEquals(followedItems.length, 1);
 
   // 2. Alice unfollows itemPost3
   result = await concept.unfollow({ user: userAlice, item: itemPost3 });
   assertEquals(result, {});
   followedItems = await concept._getFollowedItems({ user: userAlice });
-  assertEquals(followedItems.includes(itemPost3), false);
+  assertEquals(followedItems.some((f) => f.item === itemPost3), false);
   assertEquals(followedItems.length, 0);
 
   // 3. Alice follows itemPost3 again
   result = await concept.follow({ user: userAlice, item: itemPost3 });
   assertEquals(result, {});
   followedItems = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(followedItems, [itemPost3]);
+  assertArrayIncludes(followedItems, [{ item: itemPost3 }]);
   assertEquals(followedItems.length, 1); // Should be back to 1 item
 
   await client.close();
@@ -194,8 +196,8 @@ Deno.test("FollowingConcept: scenario - verify distinct user states when followi
   const [db, client] = await testDb();
   const concept = new FollowingConcept(db);
   let result: Empty | { error: string };
-  let aliceFollowed: ID[];
-  let bobFollowed: ID[];
+  let aliceFollowed: Array<{ item: ID }>;
+  let bobFollowed: Array<{ item: ID }>;
 
   // Setup: Alice follows Post2 and Post3
   await concept.follow({ user: userAlice, item: itemPost2 });
@@ -206,11 +208,13 @@ Deno.test("FollowingConcept: scenario - verify distinct user states when followi
 
   // Verify initial states
   aliceFollowed = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(aliceFollowed, [itemPost2, itemPost3]);
+  assertArrayIncludes(aliceFollowed, [{ item: itemPost2 }, {
+    item: itemPost3,
+  }]);
   assertEquals(aliceFollowed.length, 2);
 
   bobFollowed = await concept._getFollowedItems({ user: userBob });
-  assertArrayIncludes(bobFollowed, [itemPost2]);
+  assertArrayIncludes(bobFollowed, [{ item: itemPost2 }]);
   assertEquals(bobFollowed.length, 1);
 
   // Alice unfollows itemPost2
@@ -219,12 +223,12 @@ Deno.test("FollowingConcept: scenario - verify distinct user states when followi
 
   // Verify Alice no longer follows itemPost2 but Bob still does
   aliceFollowed = await concept._getFollowedItems({ user: userAlice });
-  assertEquals(aliceFollowed.includes(itemPost2), false);
-  assertArrayIncludes(aliceFollowed, [itemPost3]);
+  assertEquals(aliceFollowed.some((f) => f.item === itemPost2), false);
+  assertArrayIncludes(aliceFollowed, [{ item: itemPost3 }]);
   assertEquals(aliceFollowed.length, 1); // Alice now only follows Post3
 
   bobFollowed = await concept._getFollowedItems({ user: userBob });
-  assertArrayIncludes(bobFollowed, [itemPost2]);
+  assertArrayIncludes(bobFollowed, [{ item: itemPost2 }]);
   assertEquals(bobFollowed.length, 1); // Bob still follows Post2
 
   await client.close();
@@ -249,7 +253,7 @@ Deno.test("FollowingConcept: scenario - unfollowing an item that was never follo
 
   // Verify Alice's followed items remain unchanged
   const aliceFollowed = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(aliceFollowed, [itemPost3]); // Should still only have Post3
+  assertArrayIncludes(aliceFollowed, [{ item: itemPost3 }]); // Should still only have Post3
   assertEquals(aliceFollowed.length, 1);
 
   await client.close();
@@ -259,7 +263,7 @@ Deno.test("FollowingConcept: scenario - user follows an item that only exists as
   const [db, client] = await testDb();
   const concept = new FollowingConcept(db);
   let result: Empty | { error: string };
-  let followedItems: ID[];
+  let followedItems: Array<{ item: ID }>;
 
   // Setup: Alice follows Post3
   await concept.follow({ user: userAlice, item: itemPost3 });
@@ -269,7 +273,9 @@ Deno.test("FollowingConcept: scenario - user follows an item that only exists as
   assertEquals(result, {});
 
   followedItems = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(followedItems, [itemPost3, itemGhostPost]);
+  assertArrayIncludes(followedItems, [{ item: itemPost3 }, {
+    item: itemGhostPost,
+  }]);
   assertEquals(followedItems.length, 2);
 
   // Unfollow the 'ghost' item
@@ -277,8 +283,8 @@ Deno.test("FollowingConcept: scenario - user follows an item that only exists as
   assertEquals(result, {});
 
   followedItems = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(followedItems, [itemPost3]);
-  assertEquals(followedItems.includes(itemGhostPost), false);
+  assertArrayIncludes(followedItems, [{ item: itemPost3 }]);
+  assertEquals(followedItems.some((f) => f.item === itemGhostPost), false);
   assertEquals(followedItems.length, 1);
 
   await client.close();
@@ -293,7 +299,7 @@ Deno.test("FollowingConcept: principle - a User selects items to follow and then
   // # trace:
   // 1. A user (Alice) follows an item (Post3).
   let result: Empty | { error: string };
-  let followedItems: ID[];
+  let followedItems: Array<{ item: ID }>;
 
   console.log(`Trace: User ${userAlice} starts to follow item ${itemPost3}.`);
   result = await concept.follow({ user: userAlice, item: itemPost3 });
@@ -303,9 +309,9 @@ Deno.test("FollowingConcept: principle - a User selects items to follow and then
   // 2. The user (Alice) can access (via _getFollowedItems) the item.
   console.log(`Trace: User ${userAlice} checks their followed items.`);
   followedItems = await concept._getFollowedItems({ user: userAlice });
-  assertArrayIncludes(followedItems, [itemPost3]);
+  assertArrayIncludes(followedItems, [{ item: itemPost3 }]);
   assertEquals(followedItems.length, 1);
-  console.log(`Trace: Followed items: ${followedItems}`);
+  console.log(`Trace: Followed items: ${JSON.stringify(followedItems)}`);
 
   // 3. The user (Alice) unfollows the item (Post3).
   console.log(
@@ -319,7 +325,9 @@ Deno.test("FollowingConcept: principle - a User selects items to follow and then
   console.log(`Trace: User ${userAlice} re-checks their followed items.`);
   followedItems = await concept._getFollowedItems({ user: userAlice });
   assertEquals(followedItems, []);
-  console.log(`Trace: Followed items are now empty: ${followedItems}`);
+  console.log(
+    `Trace: Followed items are now empty: ${JSON.stringify(followedItems)}`,
+  );
 
   await client.close();
 });

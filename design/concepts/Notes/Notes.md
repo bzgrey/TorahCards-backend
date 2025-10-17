@@ -21,8 +21,9 @@
 	- notesToFlashCards(user: User, name: String): Flashcards
 		- **requires**: Notes already exist with the same user and name
 		- **effects**: returns set of question/answer pairs of flashcards based on the notes
-	- getUserNotes(user: User): set of notes content and names
+- **queries**
+	- \_getUserNotes(user: User): set of notes content and names
 		- **effects**: returns set of all Notes of given user
-	- getNotes(user: User, name: String): String
+	- \_getNotes(user: User, name: String): String
 		- **requires**: notes exist of given name and user
 		- **effects**: returns content of given notes
