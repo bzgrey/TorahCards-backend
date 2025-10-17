@@ -114,10 +114,12 @@ export default class FollowingConcept {
    * @effects Returns the set of Items currently followed by the given user.
    *          Returns an empty array if the user is not found or follows no items.
    */
-  async _getFollowedItems({ user }: { user: User }): Promise<Item[]> {
+  async _getFollowedItems(
+    { user }: { user: User },
+  ): Promise<Array<{ item: Item }>> {
     const userDoc = await this.users.findOne({ _id: user });
     if (userDoc) {
-      return userDoc.followedItems || []; // Return the array or an empty array if it's undefined
+      return (userDoc.followedItems || []).map((item) => ({ item })); // Return array of objects
     }
     return []; // User not found, so they follow no items
   }

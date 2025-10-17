@@ -255,13 +255,13 @@ export default class NotesConcept {
    */
   async _getNotes(
     { user, name }: { user: User; name: string },
-  ): Promise<string[] | { error: string }> {
+  ): Promise<Array<{ content: string }> | { error: string }> {
     const note = await this.notes.findOne({ user: user, name: name });
 
     if (!note) {
       return { error: `No note with name '${name}' found for user '${user}'.` };
     }
 
-    return [note.content];
+    return [{ content: note.content }];
   }
 }

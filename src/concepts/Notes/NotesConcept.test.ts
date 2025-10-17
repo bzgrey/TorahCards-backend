@@ -111,7 +111,7 @@ Deno.test("_getNotes: should retrieve the content of an existing note", async ()
     });
     assertEquals(
       result,
-      [NOTE_CONTENT_TORAH],
+      [{ content: NOTE_CONTENT_TORAH }],
       "Should retrieve the correct content for an existing note",
     );
   } finally {
@@ -148,7 +148,7 @@ Deno.test("addNotes: should allow different users to have notes with the same na
     });
     assertEquals(
       bobNote,
-      [NOTE_CONTENT_TORAH],
+      [{ content: NOTE_CONTENT_TORAH }],
       "Bob's note content should match",
     );
   } finally {

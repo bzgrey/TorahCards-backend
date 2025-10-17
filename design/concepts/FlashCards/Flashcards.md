@@ -20,11 +20,12 @@
 	- addCard(user: User, name: String, question: String, answer: String)
 		- **requires**: FlashCards already exist with the same user and name
 		- **effects**: adds new card to FlashCards of given name and user with given question and answer
-	- removeCard(user: User, name: String, card: Card): Card  
+	- removeCard(user: User, name: String, card: Card)
 		- **requires**:  FlashCards already exist with the same user and name and the given card exists in those FlashCards  
 		- **effects:** removes card from FlashCards of given name and user
-	- getUserCards(user: User): Set of flashcard names and corresponding question/answer pairs
+- **queries**
+	- \_getUserCards(user: User): Set of flashcard names and corresponding question/answer pairs
 		- **effects**: returns array of all Flashcards of given user
-	- getCards(user: User, name: String): Flashcards
+	- \_getCards(user: User, name: String): Flashcards
 		- **requires**: cards of given user and name exist
 		- **effects**: returns cards of given user and name
