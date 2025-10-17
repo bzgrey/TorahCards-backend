@@ -10,18 +10,13 @@ Deno.test("Labeling Concept: Operational Principle Fulfillment", async (t) => {
   const itemA = "item:article_123" as ID;
   const itemB = "item:image_456" as ID;
 
-  // Simulate internal label IDs, as the _getItemLabels returns these
-  let urgentLabelId: ID | undefined;
-  let importantLabelId: ID | undefined;
-
   await t.step("Create 'Urgent' label", async () => {
     const createResult = await labeling.createLabel({ name: "Urgent" });
     assertEquals(createResult, {});
     const labelDoc = await labeling.labelsCollection.findOne({
       name: "Urgent",
     });
-    urgentLabelId = labelDoc?._id; // Store the internal ID for verification
-    assertEquals(!!urgentLabelId, true, "Urgent label ID should be set");
+    assertEquals(!!labelDoc, true, "Urgent label should be created");
   });
 
   await t.step("Create 'Important' label", async () => {
@@ -30,8 +25,7 @@ Deno.test("Labeling Concept: Operational Principle Fulfillment", async (t) => {
     const labelDoc = await labeling.labelsCollection.findOne({
       name: "Important",
     });
-    importantLabelId = labelDoc?._id;
-    assertEquals(!!importantLabelId, true, "Important label ID should be set");
+    assertEquals(!!labelDoc, true, "Important label should be created");
   });
 
   await t.step("Add itemA to 'Urgent' label", async () => {
@@ -43,9 +37,7 @@ Deno.test("Labeling Concept: Operational Principle Fulfillment", async (t) => {
     const items = await labeling._getLabelItems({ labelName: "Urgent" });
     assertEquals(items, [itemA]);
     const labels = await labeling._getItemLabels({ item: itemA });
-    assertEquals(labels, [
-      urgentLabelId!,
-    ]);
+    assertEquals(labels, ["Urgent"]);
   });
 
   await t.step("Add itemB to 'Urgent' label", async () => {
@@ -57,12 +49,12 @@ Deno.test("Labeling Concept: Operational Principle Fulfillment", async (t) => {
     const items = await labeling._getLabelItems({ labelName: "Urgent" });
     assertEquals(items, [itemA, itemB]); // Order might not be guaranteed by $addToSet, but content should match
     const labels = await labeling._getItemLabels({ item: itemB });
-    assertEquals(labels, [urgentLabelId!]);
+    assertEquals(labels, ["Urgent"]);
   });
 
   await t.step("Verify itemA labels and Urgent items", async () => {
     const itemALabels = await labeling._getItemLabels({ item: itemA });
-    assertEquals(itemALabels, [urgentLabelId!]);
+    assertEquals(itemALabels, ["Urgent"]);
     const urgentItems = await labeling._getLabelItems({ labelName: "Urgent" });
     assertEquals(urgentItems.sort(), [itemA, itemB].sort()); // Use sort for reliable comparison
   });
@@ -113,30 +105,19 @@ Deno.test("Labeling Concept: Deleting an Item removes all its label associations
 
   const itemD = "item:report_101" as ID;
   const itemE = "item:memo_202" as ID;
-  let reviewLabelId: ID | undefined;
-  let approvedLabelId: ID | undefined;
 
   await t.step("Setup: Create labels and add items", async () => {
     await labeling.createLabel({ name: "Review" });
     await labeling.createLabel({ name: "Approved" });
-
-    const reviewDoc = await labeling.labelsCollection.findOne({
-      name: "Review",
-    });
-    reviewLabelId = reviewDoc?._id;
-    const approvedDoc = await labeling.labelsCollection.findOne({
-      name: "Approved",
-    });
-    approvedLabelId = approvedDoc?._id;
 
     await labeling.addLabel({ item: itemD, labelName: "Review" });
     await labeling.addLabel({ item: itemD, labelName: "Approved" });
     await labeling.addLabel({ item: itemE, labelName: "Review" });
 
     const itemDLabels = await labeling._getItemLabels({ item: itemD });
-    assertEquals(itemDLabels.sort(), [reviewLabelId, approvedLabelId].sort());
+    assertEquals(itemDLabels.sort(), ["Approved", "Review"].sort());
     const itemELabels = await labeling._getItemLabels({ item: itemE });
-    assertEquals(itemELabels.sort(), [reviewLabelId].sort());
+    assertEquals(itemELabels.sort(), ["Review"].sort());
 
     const reviewItems = await labeling._getLabelItems({ labelName: "Review" });
     assertEquals(reviewItems.sort(), [itemD, itemE].sort());
