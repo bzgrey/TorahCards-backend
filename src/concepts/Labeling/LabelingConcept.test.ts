@@ -35,9 +35,9 @@ Deno.test("Labeling Concept: Operational Principle Fulfillment", async (t) => {
     });
     assertEquals(addResult, {});
     const items = await labeling._getLabelItems({ labelName: "Urgent" });
-    assertEquals(items, [itemA]);
+    assertEquals(items, [{ item: itemA }]);
     const labels = await labeling._getItemLabels({ item: itemA });
-    assertEquals(labels, ["Urgent"]);
+    assertEquals(labels, [{ label: "Urgent" }]);
   });
 
   await t.step("Add itemB to 'Urgent' label", async () => {
@@ -47,16 +47,18 @@ Deno.test("Labeling Concept: Operational Principle Fulfillment", async (t) => {
     });
     assertEquals(addResult, {});
     const items = await labeling._getLabelItems({ labelName: "Urgent" });
-    assertEquals(items, [itemA, itemB]); // Order might not be guaranteed by $addToSet, but content should match
+    assertEquals(items, [{ item: itemA }, { item: itemB }]); // Order might not be guaranteed by $addToSet, but content should match
     const labels = await labeling._getItemLabels({ item: itemB });
-    assertEquals(labels, ["Urgent"]);
+    assertEquals(labels, [{ label: "Urgent" }]);
   });
 
   await t.step("Verify itemA labels and Urgent items", async () => {
     const itemALabels = await labeling._getItemLabels({ item: itemA });
-    assertEquals(itemALabels, ["Urgent"]);
+    assertEquals(itemALabels, [{ label: "Urgent" }]);
     const urgentItems = await labeling._getLabelItems({ labelName: "Urgent" });
-    assertEquals(urgentItems.sort(), [itemA, itemB].sort()); // Use sort for reliable comparison
+    // Compare by sorting the item IDs for reliable comparison
+    const sortedItems = urgentItems.map((i) => i.item).sort();
+    assertEquals(sortedItems, [itemA, itemB].sort());
   });
 
   await t.step("Remove itemA from 'Urgent' label", async () => {
@@ -66,7 +68,7 @@ Deno.test("Labeling Concept: Operational Principle Fulfillment", async (t) => {
     });
     assertEquals(deleteResult, {});
     const items = await labeling._getLabelItems({ labelName: "Urgent" });
-    assertEquals(items, [itemB]);
+    assertEquals(items, [{ item: itemB }]);
     const labels = await labeling._getItemLabels({ item: itemA });
     assertEquals(labels, []);
   });
@@ -115,16 +117,20 @@ Deno.test("Labeling Concept: Deleting an Item removes all its label associations
     await labeling.addLabel({ item: itemE, labelName: "Review" });
 
     const itemDLabels = await labeling._getItemLabels({ item: itemD });
-    assertEquals(itemDLabels.sort(), ["Approved", "Review"].sort());
+    const sortedDLabels = itemDLabels.map((l) => l.label).sort();
+    assertEquals(sortedDLabels, ["Approved", "Review"].sort());
     const itemELabels = await labeling._getItemLabels({ item: itemE });
-    assertEquals(itemELabels.sort(), ["Review"].sort());
+    const sortedELabels = itemELabels.map((l) => l.label).sort();
+    assertEquals(sortedELabels, ["Review"].sort());
 
     const reviewItems = await labeling._getLabelItems({ labelName: "Review" });
-    assertEquals(reviewItems.sort(), [itemD, itemE].sort());
+    const sortedReviewItems = reviewItems.map((i) => i.item).sort();
+    assertEquals(sortedReviewItems, [itemD, itemE].sort());
     const approvedItems = await labeling._getLabelItems({
       labelName: "Approved",
     });
-    assertEquals(approvedItems.sort(), [itemD].sort());
+    const sortedApprovedItems = approvedItems.map((i) => i.item).sort();
+    assertEquals(sortedApprovedItems, [itemD].sort());
   });
 
   await t.step("Delete itemD", async () => {
@@ -141,7 +147,7 @@ Deno.test("Labeling Concept: Deleting an Item removes all its label associations
     const reviewItemsAfterDelete = await labeling._getLabelItems({
       labelName: "Review",
     });
-    assertEquals(reviewItemsAfterDelete, [itemE]); // Only itemE should remain
+    assertEquals(reviewItemsAfterDelete, [{ item: itemE }]); // Only itemE should remain
     const approvedItemsAfterDelete = await labeling._getLabelItems({
       labelName: "Approved",
     });
