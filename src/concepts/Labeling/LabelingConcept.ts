@@ -231,7 +231,7 @@ export default class LabelingConcept {
    * Retrieves the set of items associated with a given label.
    *
    * @param {string} labelName - The name of the label.
-   * @returns {Promise<Item[] | ErrorResult>} An array of Item IDs on success, or an error object if the label is not found.
+   * @returns {Promise<Array<{item: Item}>>} An array of objects mapping "item" to Item IDs.
    *
    * @requires given label exists (by name).
    * @effects returns set of items associated with given label.
@@ -240,12 +240,12 @@ export default class LabelingConcept {
     labelName,
   }: {
     labelName: string;
-  }): Promise<Item[]> {
+  }): Promise<Array<{ item: Item }>> {
     const labelDoc = await this.labelsCollection.findOne({ name: labelName });
     if (!labelDoc) {
       return []; // Return empty array if label not found, as per concept description
     }
-    return labelDoc.items || [];
+    return (labelDoc.items || []).map((item) => ({ item }));
   }
 
   /**
@@ -253,7 +253,7 @@ export default class LabelingConcept {
    * Retrieves the set of labels (label names) associated with a given item.
    *
    * @param {Item} item - The ID of the item.
-   * @returns {Promise<string[]>} Array of label names associated with the item.
+   * @returns {Promise<Array<{label: string}>>} Array of objects mapping "label" to label names.
    *
    * @requires given item exists.
    * @effects returns array of label names associated with given item.
@@ -262,11 +262,11 @@ export default class LabelingConcept {
     item,
   }: {
     item: Item;
-  }): Promise<string[]> {
+  }): Promise<Array<{ label: string }>> {
     const itemDoc = await this.itemsCollection.findOne({ _id: item });
     if (!itemDoc) {
       return []; // Return empty array if item not found, as per concept description
     }
-    return itemDoc.labels || [];
+    return (itemDoc.labels || []).map((label) => ({ label }));
   }
 }
