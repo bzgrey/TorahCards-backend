@@ -51,7 +51,7 @@ export default class FlashCardsConcept {
   }
 
   /**
-   * @action addFlashcards
+   * @action addFlashCards
    * @param {object} params - The action parameters.
    * @param {User} params.user - The ID of the user creating the flashcards.
    * @param {string} params.name - The name/topic of the flashcard set.
@@ -61,7 +61,7 @@ export default class FlashCardsConcept {
    * @requires FlashCards don't already exist with the same user and name
    * @effects adds new flashcards to set of FlashCards associated with the given user, name, and cards
    */
-  public async addFlashcards(
+  public async addFlashCards(
     { user, name, cards }: {
       user: User;
       name: string;
@@ -223,14 +223,14 @@ export default class FlashCardsConcept {
    * @param {object} params - The query parameters.
    * @param {User} params.user - The ID of the user owning the flashcards.
    * @param {string} params.name - The name/topic of the flashcard set to retrieve.
-   * @returns {Promise<FlashCardSet | null | { error: string }>} The specified FlashCardSet object, or an error object if not found.
+   * @returns {Promise<FlashCardSet[]| { error: string }>} The specified FlashCardSet object in an arrayy, or an error object if not found.
    *
    * @requires cards of given user and name exist
    * @effects returns cards of given user and name
    */
   public async _getCards(
     { user, name }: { user: User; name: string },
-  ): Promise<FlashCardSet | null | { error: string }> {
+  ): Promise<FlashCardSet[] | { error: string }> {
     // Check precondition and effect: cards of given user and name exist and are returned
     const flashcardSet = await this.flashcards.findOne({ user, name });
     if (!flashcardSet) {
@@ -238,6 +238,6 @@ export default class FlashCardsConcept {
         error: `FlashCards set named '${name}' not found for user ${user}.`,
       };
     }
-    return flashcardSet;
+    return [flashcardSet];
   }
 }

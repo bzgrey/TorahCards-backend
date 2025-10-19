@@ -26,6 +26,6 @@
 - **queries**
 	- \_getUserCards(user: User): Set of flashcard names and corresponding question/answer pairs
 		- **effects**: returns array of all Flashcards of given user
-	- \_getCards(user: User, name: String): Flashcards
+	- \_getCards(user: User, name: String): Flashcards\[]
 		- **requires**: cards of given user and name exist
-		- **effects**: returns cards of given user and name
+		- **effects**: returns array of cards object of given user and name
