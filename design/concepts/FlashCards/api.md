@@ -226,3 +226,54 @@
 }
 ```
 ---
+
+# API \_searchFlashcards: write api for this action
+# response:
+
+***
+
+### POST /api/FlashCards/\_searchFlashcards
+
+**Description:** Searches for flashcard sets whose names match a given search term, returning them ordered by relevance.
+
+**Requirements:**
+
+* No specific requirements stated.
+
+**Effects:**
+
+* returns an array of flashcard sets whose names match the `searchTerm`, ordered by search score (greatest first).
+
+**Request Body:**
+
+```json
+{
+  "searchTerm": "string"
+}
+```
+
+**Success Response Body (Query):**
+
+```json
+[
+  {
+    "id": "ID",
+    "setOwner": "User",
+    "name": "string",
+    "cards": [
+      {
+        "question": "string",
+        "answer": "string"
+      }
+    ]
+  }
+]
+```
+
+**Error Response Body:**
+
+```json
+{
+  "error": "string"
+}
+```
