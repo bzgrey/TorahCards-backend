@@ -1,17 +1,14 @@
-[@api-extraction-from-spec](../../tools/api-extraction-from-spec.md)
-
-[@Flashcards](Flashcards.md)
-
-
-# api: Labeling concept
-
-# response:
+---
+timestamp: 'Mon Oct 20 2025 13:32:12 GMT-0400 (Eastern Daylight Time)'
+parent: '[[../20251020_133212.d1814232.md]]'
+content_id: c69aab84d91c926d1b9101aad39988ca69d07bc5ffe49ec0cff0eb550a8e4116
+---
 
 # API Specification: FlashCards Concept
 
 **Purpose:** create easy way to review topic of choice with questions and answers
 
----
+***
 
 ## API Endpoints
 
@@ -20,12 +17,15 @@
 **Description:** Adds a new set of flashcards for a specific user and topic, including an initial collection of cards.
 
 **Requirements:**
-- FlashCards don't already exist with the same user and name
+
+* FlashCards don't already exist with the same user and name
 
 **Effects:**
-- adds new flashcards to set of FlashCards associated with the given user, name, and cards
+
+* adds new flashcards to set of FlashCards associated with the given user, name, and cards
 
 **Request Body:**
+
 ```json
 {
   "user": "User",
@@ -40,29 +40,35 @@
 ```
 
 **Success Response Body (Action):**
+
 ```json
 {}
 ```
 
 **Error Response Body:**
+
 ```json
 {
   "error": "string"
 }
 ```
----
+
+***
 
 ### POST /api/FlashCards/removeFlashCards
 
 **Description:** Removes an entire set of flashcards for a specific user and topic.
 
 **Requirements:**
-- FlashCards exist with the same user and name
+
+* FlashCards exist with the same user and name
 
 **Effects:**
-- removes flashcards with given name and user from both FlashCards set and given user's set
+
+* removes flashcards with given name and user from both FlashCards set and given user's set
 
 **Request Body:**
+
 ```json
 {
   "user": "User",
@@ -71,29 +77,35 @@
 ```
 
 **Success Response Body (Action):**
+
 ```json
 {}
 ```
 
 **Error Response Body:**
+
 ```json
 {
   "error": "string"
 }
 ```
----
+
+***
 
 ### POST /api/FlashCards/addCard
 
 **Description:** Adds a single new card (question and answer) to an existing flashcards topic for a user.
 
 **Requirements:**
-- FlashCards already exist with the same user and name
+
+* FlashCards already exist with the same user and name
 
 **Effects:**
-- adds new card to FlashCards of given name and user with given question and answer
+
+* adds new card to FlashCards of given name and user with given question and answer
 
 **Request Body:**
+
 ```json
 {
   "user": "User",
@@ -104,29 +116,35 @@
 ```
 
 **Success Response Body (Action):**
+
 ```json
 {}
 ```
 
 **Error Response Body:**
+
 ```json
 {
   "error": "string"
 }
 ```
----
+
+***
 
 ### POST /api/FlashCards/removeCard
 
 **Description:** Removes a specific card from an existing flashcards topic for a user.
 
 **Requirements:**
-- FlashCards already exist with the same user and name and the given card exists in those FlashCards
+
+* FlashCards already exist with the same user and name and the given card exists in those FlashCards
 
 **Effects:**
-- removes card from FlashCards of given name and user
+
+* removes card from FlashCards of given name and user
 
 **Request Body:**
+
 ```json
 {
   "user": "User",
@@ -139,29 +157,35 @@
 ```
 
 **Success Response Body (Action):**
+
 ```json
 {}
 ```
 
 **Error Response Body:**
+
 ```json
 {
   "error": "string"
 }
 ```
----
+
+***
 
 ### POST /api/FlashCards/\_getUserCards
 
 **Description:** Retrieves all flashcards, including their names and question/answer pairs, for a given user.
 
 **Requirements:**
-- No specific requirements stated, implicitly assumes the user exists.
+
+* No specific requirements stated, implicitly assumes the user exists.
 
 **Effects:**
-- returns array of all Flashcards of given user
+
+* returns array of all Flashcards of given user
 
 **Request Body:**
+
 ```json
 {
   "user": "User"
@@ -169,6 +193,7 @@
 ```
 
 **Success Response Body (Query):**
+
 ```json
 [
   {
@@ -184,24 +209,29 @@
 ```
 
 **Error Response Body:**
+
 ```json
 {
   "error": "string"
 }
 ```
----
+
+***
 
 ### POST /api/FlashCards/\_getCards
 
 **Description:** Retrieves the cards (questions and answers) for a specific flashcards topic belonging to a user.
 
 **Requirements:**
-- cards of given user and name exist
+
+* cards of given user and name exist
 
 **Effects:**
-- returns cards of given user and name
+
+* returns cards of given user and name
 
 **Request Body:**
+
 ```json
 {
   "user": "User",
@@ -210,6 +240,7 @@
 ```
 
 **Success Response Body (Query):**
+
 ```json
 [
   {
@@ -220,9 +251,11 @@
 ```
 
 **Error Response Body:**
+
 ```json
 {
   "error": "string"
 }
 ```
----
+
+***

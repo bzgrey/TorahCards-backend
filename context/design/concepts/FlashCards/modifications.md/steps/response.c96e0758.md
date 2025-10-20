@@ -1,6 +1,15 @@
+---
+timestamp: 'Mon Oct 20 2025 13:59:59 GMT-0400 (Eastern Daylight Time)'
+parent: '[[../20251020_135959.4a209950.md]]'
+content_id: c96e07589cde80088c099841f731dca68bef1caa6ac77f7be41c86ae4de3b15f
+---
+
+# response:
+
+```typescript
 // file: src/FlashCards/FlashCardsConcept.ts
 import { Collection, Db } from "npm:mongodb";
-import { Empty, ID } from "@utils/types.ts";
+import { ID, Empty } from "@utils/types.ts";
 import { freshID } from "@utils/database.ts";
 
 // Declare collection prefix, use concept name
@@ -44,27 +53,13 @@ interface FlashCardSet {
  */
 export default class FlashCardsConcept {
   private flashcards: Collection<FlashCardSet>;
-  private indexInit?: Promise<void>;
 
   constructor(private readonly db: Db) {
     this.flashcards = this.db.collection(PREFIX + "flashcards");
   }
 
-  // Ensure indexes exist; cached to avoid repeated work / races
-  public ensureIndexes(): Promise<void> {
-    if (!this.indexInit) {
-      this.indexInit = (async () => {
-        await Promise.all([
-          this.flashcards.createIndex({ user: 1, name: 1 }, { unique: true }),
-          this.flashcards.createIndex({ name: "text" }),
-        ]);
-      })();
-    }
-    return this.indexInit;
-  }
-
   /**
-   * @action addFlashCards
+   * @action addFlashcards
    * @param {object} params - The action parameters.
    * @param {User} params.user - The ID of the user creating the flashcards.
    * @param {string} params.name - The name/topic of the flashcard set.
@@ -74,24 +69,17 @@ export default class FlashCardsConcept {
    * @requires FlashCards don't already exist with the same user and name
    * @effects adds new flashcards to set of FlashCards associated with the given user, name, and cards
    */
-  public async addFlashCards(
-    { user, name, cards }: {
-      user: User;
-      name: string;
-      cards: Omit<Card, "_id">[];
-    },
+  async addFlashcards(
+    { user, name, cards }: { user: User; name: string; cards: Omit<Card, "_id">[] },
   ): Promise<Empty | { error: string }> {
     // Check precondition: FlashCards don't already exist with the same user and name
     const existingFlashcards = await this.flashcards.findOne({ user, name });
     if (existingFlashcards) {
-      return {
-        error:
-          `FlashCards set named '${name}' already exists for user ${user}.`,
-      };
+      return { error: `FlashCards set named '${name}' already exists for user ${user}.` };
     }
 
     // Generate _id for each new card provided
-    const newCardsWithIds: Card[] = cards.map((card) => ({
+    const newCardsWithIds: Card[] = cards.map(card => ({
       _id: freshID(),
       question: card.question,
       answer: card.answer,
@@ -107,7 +95,6 @@ export default class FlashCardsConcept {
 
     // Effect: adds new flashcards to set
     await this.flashcards.insertOne(newFlashCardSet);
-    await this.ensureIndexes(); // Ensure indexes are created
     return {};
   }
 
@@ -121,15 +108,13 @@ export default class FlashCardsConcept {
    * @requires FlashCards exist with the same user and name
    * @effects removes flashcards with given name and user
    */
-  public async removeFlashCards(
+  async removeFlashCards(
     { user, name }: { user: User; name: string },
   ): Promise<Empty | { error: string }> {
     // Check precondition and effect: FlashCards exist and are removed
     const result = await this.flashcards.deleteOne({ user, name });
     if (result.deletedCount === 0) {
-      return {
-        error: `FlashCards set named '${name}' not found for user ${user}.`,
-      };
+      return { error: `FlashCards set named '${name}' not found for user ${user}.` };
     }
     return {};
   }
@@ -146,13 +131,8 @@ export default class FlashCardsConcept {
    * @requires FlashCards already exist with the same user and name
    * @effects adds new card to FlashCards of given name and user with given question and answer
    */
-  public async addCard(
-    { user, name, question, answer }: {
-      user: User;
-      name: string;
-      question: string;
-      answer: string;
-    },
+  async addCard(
+    { user, name, question, answer }: { user: User; name: string; question: string; answer: string },
   ): Promise<Empty | { error: string }> {
     // Create new card with a fresh ID
     const newCard: Card = { _id: freshID(), question, answer };
@@ -164,9 +144,7 @@ export default class FlashCardsConcept {
     );
 
     if (result.matchedCount === 0) {
-      return {
-        error: `FlashCards set named '${name}' not found for user ${user}.`,
-      };
+      return { error: `FlashCards set named '${name}' not found for user ${user}.` };
     }
     return {};
   }
@@ -182,24 +160,19 @@ export default class FlashCardsConcept {
    * @requires FlashCards already exist with the same user and name and the given card exists in those FlashCards
    * @effects removes card from FlashCards of given name and user
    */
-  public async removeCard(
+  async removeCard(
     { user, name, cardId }: { user: User; name: string; cardId: ID },
   ): Promise<Card | { error: string }> {
     // First, find the flashcard set to verify preconditions and get the card to return
     const flashcardSet = await this.flashcards.findOne({ user, name });
 
     if (!flashcardSet) {
-      return {
-        error: `FlashCards set named '${name}' not found for user ${user}.`,
-      };
+      return { error: `FlashCards set named '${name}' not found for user ${user}.` };
     }
 
-    const cardToRemove = flashcardSet.cards.find((c) => c._id === cardId);
+    const cardToRemove = flashcardSet.cards.find(c => c._id === cardId);
     if (!cardToRemove) {
-      return {
-        error:
-          `Card with ID '${cardId}' not found in FlashCards set '${name}'.`,
-      };
+      return { error: `Card with ID '${cardId}' not found in FlashCards set '${name}'.` };
     }
 
     // Effect: removes card from FlashCards
@@ -224,9 +197,7 @@ export default class FlashCardsConcept {
    *
    * @effects returns array of all Flashcards of given user
    */
-  public async _getUserCards(
-    { user }: { user: User },
-  ): Promise<FlashCardSet[]> {
+  async _getUserCards({ user }: { user: User }): Promise<FlashCardSet[]> {
     // Effects: returns all Flashcards of given user
     const userFlashcards = await this.flashcards.find({ user }).toArray();
     return userFlashcards;
@@ -237,86 +208,20 @@ export default class FlashCardsConcept {
    * @param {object} params - The query parameters.
    * @param {User} params.user - The ID of the user owning the flashcards.
    * @param {string} params.name - The name/topic of the flashcard set to retrieve.
-   * @returns {Promise<FlashCardSet[]| { error: string }>} The specified FlashCardSet object in an arrayy, or an error object if not found.
+   * @returns {Promise<FlashCardSet | null | { error: string }>} The specified FlashCardSet object, or an error object if not found.
    *
    * @requires cards of given user and name exist
    * @effects returns cards of given user and name
    */
-  public async _getCards(
+  async _getCards(
     { user, name }: { user: User; name: string },
-  ): Promise<FlashCardSet[] | { error: string }> {
+  ): Promise<FlashCardSet | null | { error: string }> {
     // Check precondition and effect: cards of given user and name exist and are returned
     const flashcardSet = await this.flashcards.findOne({ user, name });
     if (!flashcardSet) {
-      return {
-        error: `FlashCards set named '${name}' not found for user ${user}.`,
-      };
+      return { error: `FlashCards set named '${name}' not found for user ${user}.` };
     }
-    return [flashcardSet];
-  }
-
-  /**
-   * @query _searchFlashcards
-   * @param {object} params - The query parameters.
-   * @param {string} params.searchTerm - The text to search for in flashcard set names.
-   * @returns {Promise<{ flashcardSet: {id: ID, name: string, cards: Card[], setCreator: User}; score: number }[]>} An array of matching FlashCardSet
-   *          objects along with their relevance scores.
-   *
-   * @effects returns an array of flashcard sets whose names match the `searchTerm`
-   *          using `$text` search, ordered by relevance score.
-   *
-   * @note This query requires a MongoDB Text Index to be created on the `name` field of the `FlashCards.flashcards` collection.
-   *       Example index: `{ "name": "text" }`. The `$text` operator provides basic full-text search, including phrase matching
-   *       (if the search term is quoted) and stemming, but does not support fuzzy matching directly.
-   */
-  async _searchFlashcards(
-    { searchTerm }: { searchTerm: string },
-  ): Promise<
-    {
-      flashcardSet: { id: ID; name: string; cards: Card[]; setCreator: User };
-      score: number;
-    }[]
-  > {
-    // Ensure index exists before running $text (await cached init to avoid races)
-    await this.ensureIndexes();
-    // Use MongoDB aggregation pipeline with $text for full-text search
-    const results = await this.flashcards.aggregate<
-      { flashcardSet: FlashCardSet; score: number }
-    >([
-      {
-        // $match stage for filtering applying $text search
-        $match: {
-          $text: {
-            $search: searchTerm,
-          },
-        },
-      },
-      {
-        // Project the original document and the text search score
-        $project: {
-          _id: 0, // Exclude the original _id from the root level of the result document
-          flashcardSet: { // Nest the relevant fields under 'flashcardSet'
-            id: "$_id", // Map _id to id
-            name: "$name",
-            cards: "$cards",
-            setCreator: "$user",
-          },
-          score: { $meta: "textScore" }, // Include the text search relevance score
-        },
-      },
-      {
-        // Sort by the text search score in descending order (greatest first)
-        $sort: {
-          score: { $meta: "textScore" },
-        },
-      },
-    ]).toArray();
-
-    // The aggregation pipeline already transforms the data to the desired shape
-    // so we just return the results directly. The `score` field is already a number.
-    return results as unknown as {
-      flashcardSet: { id: ID; name: string; cards: Card[]; setCreator: User };
-      score: number;
-    }[];
+    return flashcardSet;
   }
 }
+```
