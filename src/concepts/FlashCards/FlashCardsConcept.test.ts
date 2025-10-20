@@ -11,6 +11,7 @@ import FlashCardsConcept from "./FlashCardsConcept.ts";
 // Define a test user ID
 const testUser1: ID = "user:Alice" as ID;
 const testUser2: ID = "user:Bob" as ID;
+const testUser3: ID = "user:Charlie" as ID;
 
 Deno.test("FlashCards Concept - Operational Principle Trace", async (t) => {
   const [db, client] = await testDb();
@@ -28,7 +29,7 @@ Deno.test("FlashCards Concept - Operational Principle Trace", async (t) => {
     ];
 
     await t.step("1. User creates flashcards on a topic", async () => {
-      const addResult = await flashCardsConcept.addFlashcards({
+      const addResult = await flashCardsConcept.addFlashCards({
         user: testUser1,
         name: topicName,
         cards: initialCards,
@@ -39,10 +40,10 @@ Deno.test("FlashCards Concept - Operational Principle Trace", async (t) => {
         name: topicName,
       });
       assert(retrievedFlashcards && !("error" in retrievedFlashcards));
-      assertEquals(retrievedFlashcards.name, topicName);
-      assertEquals(retrievedFlashcards.cards.length, 2);
+      assertEquals(retrievedFlashcards[0].name, topicName);
+      assertEquals(retrievedFlashcards[0].cards.length, 2);
       assertEquals(
-        retrievedFlashcards.cards[0].question,
+        retrievedFlashcards[0].cards[0].question,
         initialCards[0].question,
       );
     });
@@ -63,8 +64,8 @@ Deno.test("FlashCards Concept - Operational Principle Trace", async (t) => {
         name: topicName,
       });
       assert(retrievedFlashcards && !("error" in retrievedFlashcards));
-      assertEquals(retrievedFlashcards.cards.length, 3);
-      assertArrayIncludes(retrievedFlashcards.cards.map((c) => c.question), [
+      assertEquals(retrievedFlashcards[0].cards.length, 3);
+      assertArrayIncludes(retrievedFlashcards[0].cards.map((c) => c.question), [
         newQuestion,
       ]);
     });
@@ -77,7 +78,7 @@ Deno.test("FlashCards Concept - Operational Principle Trace", async (t) => {
           name: topicName,
         });
         assert(retrievedFlashcards && !("error" in retrievedFlashcards));
-        const cardToRemoveId = retrievedFlashcards.cards.find((c) =>
+        const cardToRemoveId = retrievedFlashcards[0].cards.find((c) =>
           c.question === initialCards[1].question
         )?._id;
         assert(cardToRemoveId, "Card to remove should exist.");
@@ -95,8 +96,8 @@ Deno.test("FlashCards Concept - Operational Principle Trace", async (t) => {
           name: topicName,
         });
         assert(updatedFlashcards && !("error" in updatedFlashcards));
-        assertEquals(updatedFlashcards.cards.length, 2);
-        const remainingCardQuestions = updatedFlashcards.cards.map((c) =>
+        assertEquals(updatedFlashcards[0].cards.length, 2);
+        const remainingCardQuestions = updatedFlashcards[0].cards.map((c) =>
           c.question
         );
         assertNotEquals(
@@ -129,7 +130,7 @@ Deno.test("addCard: should allow different users to have flashcards with the sam
     };
 
     // User 1 adds a card
-    const addResult1 = await flashCardsConcept.addFlashcards({
+    const addResult1 = await flashCardsConcept.addFlashCards({
       user: testUser1,
       name: topicName,
       cards: [{
@@ -140,7 +141,7 @@ Deno.test("addCard: should allow different users to have flashcards with the sam
     assertEquals(addResult1, {});
 
     // User 2 adds a card with the same topic name
-    const addResult2 = await flashCardsConcept.addFlashcards({
+    const addResult2 = await flashCardsConcept.addFlashCards({
       user: testUser2,
       name: topicName,
       cards: [{
@@ -156,8 +157,8 @@ Deno.test("addCard: should allow different users to have flashcards with the sam
       name: topicName,
     });
     assert(user1Flashcards && !("error" in user1Flashcards));
-    assertEquals(user1Flashcards.cards.length, 1);
-    assertEquals(user1Flashcards.cards[0].question, user1Card.question);
+    assertEquals(user1Flashcards[0].cards.length, 1);
+    assertEquals(user1Flashcards[0].cards[0].question, user1Card.question);
 
     // Retrieve and verify User 2's flashcards
     const user2Flashcards = await flashCardsConcept._getCards({
@@ -165,14 +166,14 @@ Deno.test("addCard: should allow different users to have flashcards with the sam
       name: topicName,
     });
     assert(user2Flashcards && !("error" in user2Flashcards));
-    assertEquals(user2Flashcards.cards.length, 1);
-    assertEquals(user2Flashcards.cards[0].question, user2Card.question);
+    assertEquals(user2Flashcards[0].cards.length, 1);
+    assertEquals(user2Flashcards[0].cards[0].question, user2Card.question);
   } finally {
     await client.close();
   }
 });
 
-Deno.test("FlashCards Concept - Basic addFlashcards and _getUserCards", async (t) => {
+Deno.test("FlashCards Concept - Basic addFlashCards and _getUserCards", async (t) => {
   const [db, client] = await testDb();
   const flashCardsConcept = new FlashCardsConcept(db);
 
@@ -181,7 +182,7 @@ Deno.test("FlashCards Concept - Basic addFlashcards and _getUserCards", async (t
     const topic2 = "Math Formulas";
 
     await t.step("Add first flashcard set for user 1", async () => {
-      const result = await flashCardsConcept.addFlashcards({
+      const result = await flashCardsConcept.addFlashCards({
         user: testUser1,
         name: topic1,
         cards: [{ question: "WWI Start?", answer: "1914" }],
@@ -190,7 +191,7 @@ Deno.test("FlashCards Concept - Basic addFlashcards and _getUserCards", async (t
     });
 
     await t.step("Add second flashcard set for user 1", async () => {
-      const result = await flashCardsConcept.addFlashcards({
+      const result = await flashCardsConcept.addFlashCards({
         user: testUser1,
         name: topic2,
         cards: [{
@@ -211,7 +212,7 @@ Deno.test("FlashCards Concept - Basic addFlashcards and _getUserCards", async (t
     });
 
     await t.step("Add a flashcard set for user 2", async () => {
-      const result = await flashCardsConcept.addFlashcards({
+      const result = await flashCardsConcept.addFlashCards({
         user: testUser2,
         name: "User2 Topic",
         cards: [{ question: "User2 Q", answer: "User2 A" }],
@@ -243,7 +244,7 @@ Deno.test("FlashCards Concept - removeFlashCards", async (t) => {
 
   try {
     const topicName = "Ephemeral Topic";
-    await flashCardsConcept.addFlashcards({
+    await flashCardsConcept.addFlashCards({
       user: testUser1,
       name: topicName,
       cards: [{ question: "Q1", answer: "A1" }],
@@ -269,6 +270,215 @@ Deno.test("FlashCards Concept - removeFlashCards", async (t) => {
         name: "NonExistent",
       });
       assert(removeResult && "error" in removeResult); // Expect error
+    });
+  } finally {
+    await client.close();
+  }
+});
+
+Deno.test("FlashCards Concept - _searchFlashcards: Basic text search and scoring", async (t) => {
+  const [db, client] = await testDb();
+  const flashCardsConcept = new FlashCardsConcept(db);
+
+  try {
+    // Setup initial data for testUser1
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "Math Concepts for Beginners",
+      cards: [],
+    });
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "Advanced Math Problems",
+      cards: [],
+    });
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "History of Ancient Greece",
+      cards: [],
+    });
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "Mathematics Fundamentals",
+      cards: [],
+    });
+
+    await t.step(
+      "Search for 'Math' and verify results for testUser1",
+      async () => {
+        const searchTerm = "Math";
+        const results = await flashCardsConcept._searchFlashcards({
+          searchTerm,
+        });
+
+        // Expect 2 results: "Math Concepts...", "Advanced Math..."
+        assertEquals(results.length, 2);
+
+        // Extract names and scores for easier assertion
+        const namesAndScores = results.map((r) => ({
+          name: r.flashcardSet.name,
+          score: r.score,
+        }));
+
+        // Check for expected names (order by score, so exact order might vary, but all should be present)
+        const foundNames = namesAndScores.map((ns) => ns.name);
+        assertArrayIncludes(foundNames, [
+          "Math Concepts for Beginners",
+          "Advanced Math Problems",
+        ]);
+
+        // Verify that 'History of Ancient Greece' is not included
+        assertNotEquals(foundNames.includes("History of Ancient Greece"), true);
+
+        // Verify scores are numbers and sorted in descending order (highest score first)
+        for (let i = 0; i < namesAndScores.length - 1; i++) {
+          assert(typeof namesAndScores[i].score === "number");
+          assert(
+            namesAndScores[i].score >= namesAndScores[i + 1].score,
+            `Scores not sorted correctly: ${namesAndScores[i].score} vs ${
+              namesAndScores[i + 1].score
+            }`,
+          );
+        }
+
+        // Verify setCreator field
+        results.forEach((r) => {
+          assertEquals(r.flashcardSet.setCreator, testUser1);
+        });
+      },
+    );
+
+    await t.step("Search for a more specific term 'Fundamentals'", async () => {
+      const searchTerm = "Fundamentals";
+      const results = await flashCardsConcept._searchFlashcards({
+        searchTerm,
+      });
+
+      assertEquals(results.length, 1);
+      assertEquals(results[0].flashcardSet.name, "Mathematics Fundamentals");
+      assertEquals(results[0].flashcardSet.setCreator, testUser1);
+      assert(typeof results[0].score === "number");
+    });
+  } finally {
+    await client.close();
+  }
+});
+
+Deno.test("FlashCards Concept - _searchFlashcards: No matches scenario", async (t) => {
+  const [db, client] = await testDb();
+  const flashCardsConcept = new FlashCardsConcept(db);
+
+  try {
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "Biology Basics",
+      cards: [],
+    });
+
+    await t.step(
+      "Search for a term that does not exist for testUser1",
+      async () => {
+        const searchTerm = "Physics";
+        const results = await flashCardsConcept._searchFlashcards({
+          searchTerm,
+        });
+        console.log("Results for non-matching search term:", results);
+        assertEquals(results.length, 0); // Expect no results
+      },
+    );
+
+    await t.step(
+      "Search for an empty string (should return all if no text index on empty string, but usually returns nothing meaningful)",
+      async () => {
+        // MongoDB $text search with an empty string typically returns no results
+        // or can behave unexpectedly without a proper text index on empty values
+        const searchTerm = "";
+        const results = await flashCardsConcept._searchFlashcards({
+          searchTerm,
+        });
+        assertEquals(results.length, 0);
+      },
+    );
+  } finally {
+    await client.close();
+  }
+});
+
+Deno.test("FlashCards Concept - _searchFlashcards: Phrase search with exact matches and stemming", async (t) => {
+  const [db, client] = await testDb();
+  const flashCardsConcept = new FlashCardsConcept(db);
+
+  try {
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "Introduction to Computer Science",
+      cards: [],
+    });
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "Advanced Data Structures",
+      cards: [],
+    });
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "Computer Programming Basics",
+      cards: [],
+    });
+    await flashCardsConcept.addFlashCards({
+      user: testUser1,
+      name: "Data Science Algorithms",
+      cards: [],
+    });
+
+    await t.step(
+      "Search for a multi-word phrase 'Computer Science'",
+      async () => {
+        const searchTerm = '"Computer Science"'; // Quoted for phrase search in $text
+        const results = await flashCardsConcept._searchFlashcards({
+          searchTerm,
+        });
+
+        assertEquals(results.length, 1);
+        assertEquals(
+          results[0].flashcardSet.name,
+          "Introduction to Computer Science",
+        );
+        assertEquals(results[0].flashcardSet.setCreator, testUser1);
+      },
+    );
+
+    await t.step(
+      "Search for a single word 'Programming', expecting stemming effect",
+      async () => {
+        const searchTerm = "program"; // Will match "Programming" due to stemming
+        const results = await flashCardsConcept._searchFlashcards({
+          searchTerm,
+        });
+
+        assertEquals(results.length, 1);
+        assertEquals(
+          results[0].flashcardSet.name,
+          "Computer Programming Basics",
+        );
+        assertEquals(results[0].flashcardSet.setCreator, testUser1);
+      },
+    );
+
+    await t.step("Search for 'Data' (should match two sets)", async () => {
+      const searchTerm = "Data";
+      const results = await flashCardsConcept._searchFlashcards({
+        searchTerm,
+      });
+
+      assertEquals(results.length, 2);
+      const foundNames = results.map((r) => r.flashcardSet.name);
+      assertArrayIncludes(foundNames, [
+        "Advanced Data Structures",
+        "Data Science Algorithms",
+      ]);
+      results.forEach((r) =>
+        assertEquals(r.flashcardSet.setCreator, testUser1)
+      );
     });
   } finally {
     await client.close();

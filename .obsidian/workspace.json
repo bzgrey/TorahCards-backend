@@ -8,20 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "d29aa2b3819f9011",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "design/concepts/Labeling/Labeling.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Labeling"
-            }
-          },
-          {
             "id": "cf6b59d4bd61633d",
             "type": "leaf",
             "state": {
@@ -83,12 +69,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "design/concepts/Notes/api.md",
+                "file": "design/concepts/FlashCards/Flashcards.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "api"
+              "title": "Flashcards"
+            }
+          },
+          {
+            "id": "1801ab8dcf8c5d42",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "design/concepts/FlashCards/Flashcards.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Flashcards"
             }
           },
           {
@@ -190,7 +190,7 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -340,41 +340,41 @@
   },
   "active": "e602b6bf4a2e7caf",
   "lastOpenFiles": [
-    "design/concepts/Labeling/api.md",
-    "design/concepts/FlashCards/api.md",
+    "design/concepts/FlashCards/modifications.md",
+    "context/design/concepts/FlashCards/modifications.md/20251020_142929.0c04afe5.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/response.cc757bca.md",
+    "context/design/concepts/FlashCards/modifications.md/20251020_142904.7a03c627.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/response.43952233.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/current implementation.e5a04859.md",
+    "context/design/concepts/FlashCards/modifications.md/20251020_142623.2ac7601e.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/response.fe89028d.md",
+    "context/design/concepts/FlashCards/modifications.md/20251020_142451.ea433b45.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/response.31d8b5a4.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/test.ce89edf6.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/_.62ed2634.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/Testing notes.e7c87da8.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/_.eb4d1820.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/approach.3e0d5a8f.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/_.ae61325b.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/test.febf382e.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/current implementation.08b5fda9.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/concept.2ff3e3b1.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/concept.ddaf2456.md",
     "design/concepts/FlashCards/Flashcards.md",
-    "design/concepts/Notes/api.md",
-    "design/concepts/Following/Following.md",
+    "context/design/concepts/FlashCards/Flashcards.md/20251020_141536.62ce71a2.md",
+    "context/design/concepts/FlashCards/Flashcards.md/steps/concept.ddaf2456.md",
+    "context/design/concepts/FlashCards/modifications.md/20251020_141009.4cbfd64e.md",
+    "context/design/concepts/FlashCards/modifications.md/steps/response.ddec3905.md",
+    "context/design/concepts/FlashCards/modifications.md/20251020_140929.0cd26e34.md",
+    "context/design/concepts/FlashCards/modifications.md/steps",
+    "context/design/brainstorming/search.md/steps",
     "src/api",
-    "context/design/concepts/Notes/api.md/20251017_155305.c2569baf.md",
-    "context/design/concepts/Notes/api.md/steps/API Specification.9fa0fa4b.md",
-    "context/design/concepts/Notes/api.md/steps/response.6d76b65d.md",
-    "context/design/concepts/Notes/api.md/steps/prompt.2e341510.md",
-    "context/design/concepts/Notes/api.md/steps/concept.37d16531.md",
-    "context/design/concepts/Notes/api.md/steps/api.7b342c33.md",
-    "context/design/concepts/Notes/api.md/steps/_.fa3ad648.md",
-    "context/design/concepts/Notes/api.md/steps/_.70b30df5.md",
     "context/design/concepts/Notes/api.md/steps",
-    "context/design/concepts/Notes/api.md/20251017_155251.85e1f09a.md",
-    "context/design/concepts/Notes/api.md",
-    "design/concepts/Notes/Notes.md",
-    "design/tools/api-extraction-from-spec.md",
-    "context/design/concepts/FlashCards/api.md/20251017_154529.3b28146b.md",
-    "context/design/concepts/FlashCards/api.md/steps/API Specification.c69aab84.md",
-    "context/design/concepts/FlashCards/api.md/steps/response.6d76b65d.md",
-    "context/design/concepts/FlashCards/api.md/20251017_154513.4a96f3e0.md",
-    "context/design/concepts/FlashCards/api.md/steps/api.8dc781de.md",
-    "context/design/concepts/FlashCards/api.md/steps/prompt.2e341510.md",
-    "context/design/concepts/FlashCards/api.md/steps/concept.3e003a74.md",
-    "context/design/concepts/FlashCards/api.md/steps/_.fa3ad648.md",
-    "context/design/concepts/FlashCards/api.md/steps/_.70b30df5.md",
     "context/design/concepts/FlashCards/api.md/steps",
     "context/design/concepts/Labeling/api.md/steps",
     "src/concepts/Following/FollowingConcept.test.ts",
     "context/design/concepts/Following/testing.md/steps",
     "src/concepts/Following/FollowingConcept.ts",
-    "src/concepts/Following",
-    "context/design/concepts/Following/implementation.md/steps",
-    "context/design/concepts/Following/Following.md/steps"
+    "src/concepts/Following"
   ]
 }
