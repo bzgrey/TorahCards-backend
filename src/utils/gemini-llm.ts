@@ -22,7 +22,7 @@ export class GeminiLLM {
       const model = genAI.getGenerativeModel({
         model: GEMINI_MODEL,
         generationConfig: {
-          maxOutputTokens: 3000,
+          maxOutputTokens: 4000,
         },
       });
       // Execute the LLM
