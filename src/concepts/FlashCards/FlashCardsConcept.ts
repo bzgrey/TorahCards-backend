@@ -81,6 +81,9 @@ export default class FlashCardsConcept {
       cards: Omit<Card, "_id">[];
     },
   ): Promise<Empty | { error: string }> {
+    // Ensure indexes are created
+    await this.ensureIndexes();
+
     // Check precondition: FlashCards don't already exist with the same user and name
     const existingFlashcards = await this.flashcards.findOne({ user, name });
     if (existingFlashcards) {
@@ -107,7 +110,6 @@ export default class FlashCardsConcept {
 
     // Effect: adds new flashcards to set
     await this.flashcards.insertOne(newFlashCardSet);
-    await this.ensureIndexes(); // Ensure indexes are created
     return {};
   }
 
