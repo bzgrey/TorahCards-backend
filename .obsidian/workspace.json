@@ -69,7 +69,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "design/concepts/UserAuth/api.md",
+                "file": "design/concepts/FlashCards/api.md",
                 "mode": "source",
                 "source": false
               },
@@ -366,8 +366,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "9b42b4503c7d88ad",
+  "active": "e602b6bf4a2e7caf",
   "lastOpenFiles": [
+    "Untitled.md",
+    "design/concepts/FlashCards/api.md",
+    "design/concepts/FlashCards/Flashcards.md",
+    "design/concepts/UserAuth/api.md",
     "context/design/concepts/UserAuth/api.md/20251020_172451.da06d402.md",
     "context/design/concepts/UserAuth/api.md/steps/API Specification.13f2dc87.md",
     "context/design/concepts/UserAuth/api.md/steps/response.6d76b65d.md",
@@ -384,8 +388,6 @@
     "design/concepts/Notes/implementation.md",
     "design/concepts/UserAuth/implementation.md",
     "design/concepts/UserAuth/testing.md",
-    "design/concepts/UserAuth/api.md",
-    "design/concepts/FlashCards/api.md",
     "src/concepts/UserAuth/UserAuthConcept.test.ts",
     "context/design/concepts/UserAuth/testing.md/20251020_171328.d4f64517.md",
     "context/design/concepts/UserAuth/testing.md/steps/response.9cfa52d3.md",
@@ -394,8 +396,6 @@
     "context/design/concepts/UserAuth/testing.md/steps/_.62ed2634.md",
     "context/design/concepts/UserAuth/testing.md/steps/Testing notes.e7c87da8.md",
     "context/design/concepts/UserAuth/testing.md/steps/_.eb4d1820.md",
-    "context/design/concepts/UserAuth/testing.md/steps/approach.3e0d5a8f.md",
-    "context/design/concepts/UserAuth/testing.md/steps/_.ae61325b.md",
     "context/design/concepts/UserAuth/testing.md/steps",
     "src/concepts/UserAuth/UserAuthConcept.ts",
     "src/concepts/UserAuth",

@@ -192,7 +192,7 @@
 ```
 ---
 
-### POST /api/UserAuth/_getAuthenticatedUser
+### POST /api/UserAuth/\_getAuthenticatedUser
 
 **Description:** Retrieves the User ID associated with a valid session token.
 
