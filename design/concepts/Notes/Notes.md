@@ -27,3 +27,6 @@
 	- \_getNotes(user: User, name: String): String
 		- **requires**: notes exist of given name and user
 		- **effects**: returns content of given notes
+	-  \_searchNotes(searchTerm: String): {notes: {id: ID, notesOwner: User, name: String, content: String}, score: number}\[]
+        *   **effects**: returns an array of notes whose names match the `searchTerm`, ordered by search score (greatest first).
+    
