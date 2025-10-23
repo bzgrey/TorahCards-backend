@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assert, assertArrayIncludes, assertEquals } from "jsr:@std/assert";
 import { testDb } from "@utils/database.ts";
 import { ID } from "@utils/types.ts";
 import NotesConcept from "./NotesConcept.ts";
@@ -176,6 +176,239 @@ Deno.test("notesToFlashcards: handling of empty notes input. Should return zero 
       { "cards": [] },
       "Flashcards generation from empty notes should return empty cards array",
     );
+  } finally {
+    await client.close();
+  }
+});
+
+Deno.test("Notes Concept - _searchNotes: Basic search across users and scoring", async (t) => {
+  const [db, client] = await testDb();
+  const notesConcept = new NotesConcept(db);
+
+  try {
+    // Setup initial data for USER_ALICE and USER_BOB
+    await notesConcept.addNotes({
+      user: USER_ALICE,
+      name: "Lecture Notes on Biology",
+      content: "This covers cell structure and functions.",
+    });
+    await notesConcept.addNotes({
+      user: USER_ALICE,
+      name: "Biology Exam Study Guide",
+      content: "Key topics for the upcoming biology exam.",
+    });
+    await notesConcept.addNotes({
+      user: USER_BOB,
+      name: "Biology Project Ideas",
+      content: "Brainstorming concepts for the group project.",
+    });
+    await notesConcept.addNotes({
+      user: USER_BOB,
+      name: "History of Ancient Rome",
+      content: "Important dates and figures from Roman history.",
+    });
+
+    await t.step(
+      "Search for 'Biology' and verify results from both users, sorted by score",
+      async () => {
+        const searchTerm = "Biology";
+        const results = await notesConcept._searchNotes({ searchTerm });
+        console.log("Search results for 'Biology':", results);
+        // Expect 3 results: two from USER_ALICE, one from USER_BOB
+        assertEquals(results.length, 3);
+
+        // Extract names, owners, and scores for easier assertion
+        const resultDetails = results.map((r) => ({
+          name: r.note.name,
+          owner: r.note.notesOwner,
+          score: r.score,
+        }));
+
+        const foundNames = resultDetails.map((rd) => rd.name);
+        assertArrayIncludes(foundNames, [
+          "Lecture Notes on Biology",
+          "Biology Exam Study Guide",
+          "Biology Project Ideas",
+        ]);
+
+        // Verify that 'History of Ancient Rome' is not included
+        assert(!foundNames.includes("History of Ancient Rome"));
+
+        // Verify scores are numbers and sorted in descending order (highest score first)
+        for (let i = 0; i < resultDetails.length - 1; i++) {
+          assert(typeof resultDetails[i].score === "number");
+          assert(
+            resultDetails[i].score >= resultDetails[i + 1].score,
+            `Scores not sorted correctly: ${resultDetails[i].score} vs ${
+              resultDetails[i + 1].score
+            }`,
+          );
+        }
+
+        // Verify notesOwner field for each returned note
+        for (const res of resultDetails) {
+          if (
+            res.name === "Lecture Notes on Biology" ||
+            res.name === "Biology Exam Study Guide"
+          ) {
+            assertEquals(
+              res.owner,
+              USER_ALICE,
+              `Owner of '${res.name}' should be ${USER_ALICE}`,
+            );
+          } else if (res.name === "Biology Project Ideas") {
+            assertEquals(
+              res.owner,
+              USER_BOB,
+              `Owner of '${res.name}' should be ${USER_BOB}`,
+            );
+          } else {
+            assert(false, `Unexpected note found: ${res.name}`);
+          }
+        }
+      },
+    );
+
+    await t.step(
+      "Search for 'Ancient' and verify results for USER_BOB",
+      async () => {
+        const searchTerm = "Ancient";
+        const results = await notesConcept._searchNotes({ searchTerm });
+
+        assertEquals(results.length, 1);
+        assertEquals(results[0].note.name, "History of Ancient Rome");
+        assertEquals(results[0].note.notesOwner, USER_BOB);
+        assert(typeof results[0].score === "number");
+      },
+    );
+  } finally {
+    await client.close();
+  }
+});
+
+Deno.test("Notes Concept - _searchNotes: No matches scenario and empty search term", async (t) => {
+  const [db, client] = await testDb();
+  const notesConcept = new NotesConcept(db);
+
+  try {
+    await notesConcept.addNotes({
+      user: USER_ALICE,
+      name: "Physics Concepts",
+      content: "Basic laws of motion.",
+    });
+
+    await t.step(
+      "Search for a term that does not exist in any notes",
+      async () => {
+        const searchTerm = "Chemistry";
+        const results = await notesConcept._searchNotes({ searchTerm });
+
+        assertEquals(results.length, 0); // Expect no results
+      },
+    );
+
+    await t.step(
+      "Search for an empty string (should return no results from $text)",
+      async () => {
+        const searchTerm = "";
+        const results = await notesConcept._searchNotes({ searchTerm });
+        assertEquals(results.length, 0); // $text search with empty string usually returns no results
+      },
+    );
+
+    await t.step(
+      "Search for a term with no matches for a user with no notes (still global search)",
+      async () => {
+        await notesConcept.addNotes({
+          user: USER_BOB,
+          name: "Art History",
+          content: "Renaissance art movements.",
+        });
+        const searchTerm = "Mathematics";
+        const results = await notesConcept._searchNotes({ searchTerm });
+        assertEquals(results.length, 0);
+      },
+    );
+  } finally {
+    await client.close();
+  }
+});
+
+Deno.test("Notes Concept - _searchNotes: Phrase search and stemming effects", async (t) => {
+  const [db, client] = await testDb();
+  const notesConcept = new NotesConcept(db);
+
+  try {
+    await notesConcept.addNotes({
+      user: USER_ALICE,
+      name: "Introduction to Software Engineering",
+      content: "Fundamentals of software design.",
+    });
+    await notesConcept.addNotes({
+      user: USER_BOB,
+      name: "Effective Software Development",
+      content: "Best practices for agile teams.",
+    });
+    await notesConcept.addNotes({
+      user: USER_ALICE,
+      name: "Database Design Principles",
+      content: "Relational vs NoSQL databases.",
+    });
+    await notesConcept.addNotes({
+      user: USER_BOB,
+      name: "Learning SQL for Beginners",
+      content: "Structured Query Language basics.",
+    });
+
+    await t.step(
+      "Search for a multi-word phrase 'Software Engineering'",
+      async () => {
+        const searchTerm = '"Software Engineering"'; // Quoted for phrase search in $text
+        const results = await notesConcept._searchNotes({ searchTerm });
+
+        assertEquals(results.length, 1);
+        assertEquals(
+          results[0].note.name,
+          "Introduction to Software Engineering",
+        );
+        assertEquals(results[0].note.notesOwner, USER_ALICE);
+      },
+    );
+
+    await t.step(
+      "Search for a single word 'develop', expecting stemming effect (Development)",
+      async () => {
+        const searchTerm = "develop"; // Will match "Development" due to stemming
+        const results = await notesConcept._searchNotes({ searchTerm });
+
+        assertEquals(results.length, 1);
+        assertEquals(results[0].note.name, "Effective Software Development");
+        assertEquals(results[0].note.notesOwner, USER_BOB);
+      },
+    );
+
+    await t.step("Search for 'Database' (should match two notes)", async () => {
+      const searchTerm = "Database";
+      const results = await notesConcept._searchNotes({ searchTerm });
+
+      assertEquals(results.length, 2);
+      const foundNames = results.map((r) => r.note.name);
+      assertArrayIncludes(foundNames, [
+        "Database Design Principles",
+        "Learning SQL for Beginners",
+      ]);
+
+      // Verify owners
+      for (const res of results) {
+        if (res.note.name === "Database Design Principles") {
+          assertEquals(res.note.notesOwner, USER_ALICE);
+        } else if (res.note.name === "Learning SQL for Beginners") {
+          assertEquals(res.note.notesOwner, USER_BOB);
+        } else {
+          assert(false, `Unexpected note found: ${res.note.name}`);
+        }
+      }
+    });
   } finally {
     await client.close();
   }
