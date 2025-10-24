@@ -341,9 +341,9 @@ Deno.test("FlashCards Concept - _searchFlashcards: Basic text search and scoring
           );
         }
 
-        // Verify setCreator field
+        // Verify setOwner field
         results.forEach((r) => {
-          assertEquals(r.flashcardSet.setCreator, testUser1);
+          assertEquals(r.flashcardSet.setOwner, testUser1);
         });
       },
     );
@@ -356,7 +356,7 @@ Deno.test("FlashCards Concept - _searchFlashcards: Basic text search and scoring
 
       assertEquals(results.length, 1);
       assertEquals(results[0].flashcardSet.name, "Mathematics Fundamentals");
-      assertEquals(results[0].flashcardSet.setCreator, testUser1);
+      assertEquals(results[0].flashcardSet.setOwner, testUser1);
       assert(typeof results[0].score === "number");
     });
   } finally {
@@ -443,7 +443,7 @@ Deno.test("FlashCards Concept - _searchFlashcards: Phrase search with exact matc
           results[0].flashcardSet.name,
           "Introduction to Computer Science",
         );
-        assertEquals(results[0].flashcardSet.setCreator, testUser1);
+        assertEquals(results[0].flashcardSet.setOwner, testUser1);
       },
     );
 
@@ -460,7 +460,7 @@ Deno.test("FlashCards Concept - _searchFlashcards: Phrase search with exact matc
           results[0].flashcardSet.name,
           "Computer Programming Basics",
         );
-        assertEquals(results[0].flashcardSet.setCreator, testUser1);
+        assertEquals(results[0].flashcardSet.setOwner, testUser1);
       },
     );
 
@@ -476,9 +476,7 @@ Deno.test("FlashCards Concept - _searchFlashcards: Phrase search with exact matc
         "Advanced Data Structures",
         "Data Science Algorithms",
       ]);
-      results.forEach((r) =>
-        assertEquals(r.flashcardSet.setCreator, testUser1)
-      );
+      results.forEach((r) => assertEquals(r.flashcardSet.setOwner, testUser1));
     });
   } finally {
     await client.close();
