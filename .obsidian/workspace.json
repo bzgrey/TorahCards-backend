@@ -55,12 +55,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "design/concepts/Notes/api.md",
+                "file": "design/concepts/Labeling/Labeling.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "api"
+              "title": "Labeling"
             }
           },
           {
@@ -366,15 +366,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "9b42b4503c7d88ad",
+  "active": "149a250fe4429eac",
   "lastOpenFiles": [
+    "design/concepts/Following/Following.md",
+    "design/concepts/Notes/api.md",
     "context/design/concepts/Notes/api.md/20251023_150850.f0b9519f.md",
     "context/design/concepts/Notes/api.md/steps/response.1978e3aa.md",
     "context/design/concepts/Notes/api.md/20251023_150844.facc3260.md",
     "context/design/concepts/Notes/api.md/steps/search query.f6424327.md",
     "context/design/concepts/Notes/api.md/steps/concept.d97cfb9f.md",
     "design/concepts/Notes/Notes.md",
-    "design/concepts/Notes/api.md",
     "design/concepts/FlashCards/api.md",
     "design/concepts/Notes/modifications.md",
     "context/design/concepts/Notes/modifications.md/20251023_145009.57b3ab6a.md",
@@ -393,7 +394,6 @@
     "context/design/concepts/Notes/modifications.md/steps/response.a0822928.md",
     "context/design/concepts/Notes/modifications.md/steps/response.43952233.md",
     "context/design/concepts/Notes/modifications.md/steps/test.ce89edf6.md",
-    "context/design/concepts/Notes/modifications.md/steps/_.62ed2634.md",
     "context/design/concepts/Notes/modifications.md/steps",
     "context/design/concepts/UserAuth/api.md/steps",
     "src/concepts/UserAuth/UserAuthConcept.test.ts",
