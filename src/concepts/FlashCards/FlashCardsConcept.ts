@@ -261,7 +261,7 @@ export default class FlashCardsConcept {
    * @query _searchFlashcards
    * @param {object} params - The query parameters.
    * @param {string} params.searchTerm - The text to search for in flashcard set names.
-   * @returns {Promise<{ flashcardSet: {id: ID, name: string, cards: Card[], setCreator: User}; score: number }[]>} An array of matching FlashCardSet
+   * @returns {Promise<{ flashcardSet: {id: ID, name: string, cards: Card[], setOwner: User}; score: number }[]>} An array of matching FlashCardSet
    *          objects along with their relevance scores.
    *
    * @effects returns an array of flashcard sets whose names match the `searchTerm`
@@ -275,7 +275,7 @@ export default class FlashCardsConcept {
     { searchTerm }: { searchTerm: string },
   ): Promise<
     {
-      flashcardSet: { id: ID; name: string; cards: Card[]; setCreator: User };
+      flashcardSet: { id: ID; name: string; cards: Card[]; setOwner: User };
       score: number;
     }[]
   > {
@@ -301,7 +301,7 @@ export default class FlashCardsConcept {
             id: "$_id", // Map _id to id
             name: "$name",
             cards: "$cards",
-            setCreator: "$user",
+            setOwner: "$user",
           },
           score: { $meta: "textScore" }, // Include the text search relevance score
         },
@@ -317,7 +317,7 @@ export default class FlashCardsConcept {
     // The aggregation pipeline already transforms the data to the desired shape
     // so we just return the results directly. The `score` field is already a number.
     return results as unknown as {
-      flashcardSet: { id: ID; name: string; cards: Card[]; setCreator: User };
+      flashcardSet: { id: ID; name: string; cards: Card[]; setOwner: User };
       score: number;
     }[];
   }

@@ -189,3 +189,51 @@
 ```
 
 ---
+# search query: write an api for the new search query
+# response:
+
+***
+
+### POST /api/Notes/\_searchNotes
+
+**Description:** Searches for notes based on a provided term, returning an array of matching notes ordered by search score.
+
+**Requirements:**
+
+* (None explicitly specified)
+
+**Effects:**
+
+* returns an array of notes whose names match the `searchTerm`, ordered by search score (greatest first).
+
+**Request Body:**
+
+```json
+{
+  "searchTerm": "string"
+}
+```
+
+**Success Response Body (Query):**
+
+```json
+[
+  {
+    "note": {
+      "id": "string",
+      "notesOwner": "string",
+      "name": "string",
+      "content": "string"
+    },
+    "score": "number"
+  }
+]
+```
+
+**Error Response Body:**
+
+```json
+{
+  "error": "string"
+}
+```
