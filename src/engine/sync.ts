@@ -304,6 +304,9 @@ export class SyncConcept {
           let instrumented = boundActions.get(value);
           if (instrumented === undefined) {
             const action = value.bind(concept);
+            // To allow this.action to be reactive, we can bind receiver instead
+            // However, this might break access to private fields or methods
+            // const action = value.bind(receiver);
             instrumented = async function instrumented(
               args: ActionArguments,
             ) {

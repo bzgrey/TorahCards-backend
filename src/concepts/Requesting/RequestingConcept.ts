@@ -5,9 +5,16 @@ import { ID } from "@utils/types.ts";
 import { exclusions, inclusions } from "./passthrough.ts";
 import "jsr:@std/dotenv/load";
 
-// --- Configuration ---
-// Load configuration from environment variables with sensible defaults.
-const REQUESTING_PORT = parseInt(Deno.env.get("REQUESTING_PORT") ?? "8000", 10);
+/**
+ * # Requesting concept configuration
+ * The following environment variables are available:
+ *
+ * - PORT: the port to the server binds, default 10000
+ * - REQUESTING_BASE_URL: the base URL prefix for api requests, default "/api"
+ * - REQUESTING_TIMEOUT: the timeout for requests, default 10000ms
+ * - REQUESTING_SAVE_RESPONSES: whether to persist responses or not, default true
+ */
+const PORT = parseInt(Deno.env.get("PORT") ?? "10000", 10);
 const REQUESTING_BASE_URL = Deno.env.get("REQUESTING_BASE_URL") ?? "/api";
 const REQUESTING_TIMEOUT = parseInt(
   Deno.env.get("REQUESTING_TIMEOUT") ?? "10000",
@@ -283,5 +290,5 @@ export function startRequestingServer(
     `\n🚀 Requesting server listening for POST requests at base path of ${routePath}`,
   );
 
-  Deno.serve({ port: REQUESTING_PORT }, app.fetch);
+  Deno.serve({ port: PORT }, app.fetch);
 }

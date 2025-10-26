@@ -1,5 +1,5 @@
 /**
- * Sample synchronizations: feel free to delete!
+ * Sample synchronizations: feel free to delete this entire file!
  */
 
 import { LikertSurvey, Requesting } from "@concepts";
