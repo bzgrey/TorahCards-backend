@@ -237,3 +237,46 @@
   "error": "string"
 }
 ```
+
+### POST /api/Notes/\_getNotesInfo
+
+**Description:** Retrieves a Notes object corresponding to a given Notes ID.
+
+**Requirements:**
+
+* Nothing
+
+**Effects:**
+
+* returns array of Notes objects corresponding to the given ids that exist. Ones that don't exist won't return anything
+
+**Request Body:**
+
+```json
+{
+  "notesIDs": [
+    "string"
+  ]
+}
+```
+
+**Success Response Body (Query):**
+
+```json
+[
+  {
+	"id": "string",
+    "user": "string",
+    "name": "string",
+    "content": "string"
+  }
+]
+```
+
+**Error Response Body:**
+
+```json
+{
+  "error": "string"
+}
+```
