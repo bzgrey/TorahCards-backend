@@ -13,6 +13,6 @@
 	- unfollow(user: User, item: Item)
 		- **requires**: User is currently following the item
 		- **effects**: Removes the item from the set of followed Items for the given user
-	- \_getFollowedItems(user: User): set of Items
-		- **effects:** Returns the set of Items currently followed by the given user
+	- \_getFollowedItems(user: User): Item\[]
+		- **effects:** Returns an array of Items currently followed by the given user
 

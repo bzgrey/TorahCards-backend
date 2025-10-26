@@ -321,4 +321,23 @@ export default class FlashCardsConcept {
       score: number;
     }[];
   }
+
+  /**
+   * @query _getFlashcardInfo
+   * @param {object} params - The query parameters.
+   * @param {ID[]} params.flashcardIDs - An array of flashcard set IDs to retrieve.
+   * @returns {Promise<FlashCardSet[]>} An array of FlashCardSet objects corresponding to the given IDs if they exist.
+   *
+   * @effects returns array of Flashcards objects corresponding to given ids if they exist
+   */
+  public async _getFlashcardInfo(
+    { flashcardIDs }: { flashcardIDs: ID[] },
+  ): Promise<FlashCardSet[]> {
+    // Query for all flashcard sets whose _id is in the provided array
+    const flashcardSets = await this.flashcards.find({
+      _id: { $in: flashcardIDs },
+    }).toArray();
+
+    return flashcardSets;
+  }
 }

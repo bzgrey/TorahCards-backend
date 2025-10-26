@@ -53,14 +53,15 @@ Here is the concept specification for `UserAuth`:
 
 **queries**
 
-  _getUsername (users: User\[]) : (username: String)\[]
+  \_getUsername (users: User\[]) : (username: String)\[]
     **requires** `users` exists in set of `Users`
     **effects** returns array of `usernames` of `users`
 
-  _getPassword (user: User) : (password: String)\[]
+  \_getPassword (user: User) : (password: String)\[]
     **requires** `user` exists in set of `Users`
     **effects** returns array of `password` of `user`
 
-  _getAuthenticatedUser (token: String) : (user: User)\[]
+  \_getAuthenticatedUser (token: String) : (user: User)\[]
     **requires** exists `t` in `Tokens` such that `value(t) == token`
     **effects** returns array of `user(t)`
+    

@@ -29,4 +29,6 @@
 		- **effects**: returns content of given notes
 	-  \_searchNotes(searchTerm: String): {note: {id: ID, notesOwner: User, name: String, content: String}, score: number}\[]
         *   **effects**: returns an array of notes whose names match the `searchTerm`, ordered by search score (greatest first).
+    *   \_getNotesInfo(flashcards: Flashcards (id) \[]): Notes \[]
+	    * **effects** returns array of Notes objects corresponding to the given ids that exist. Ones that don't exist won't return anything
     

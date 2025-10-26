@@ -31,3 +31,5 @@
 		- **effects**: returns array of cards object of given user and name
 	- \_searchFlashcards(searchTerm: String): flashcardSet: {id: ID, setOwner: User, name: String, cards: Card\[]}\[]
         *   **effects**: returns an array of flashcard sets whose names match the `searchTerm`, ordered by search score (greatest first).
+    * \_getFlashcardInfo(flashcards: Flashcards (id)): Flashcards \[]
+	    * **effects** returns array of Flashcards objects corresponding to given ids if they exist

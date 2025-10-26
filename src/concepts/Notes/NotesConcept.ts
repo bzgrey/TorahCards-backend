@@ -345,4 +345,23 @@ export default class NotesConcept {
       score: number;
     }[];
   }
+
+  /**
+   * @query _getNotesInfo
+   * @param {object} params - The query parameters.
+   * @param {ID[]} params.noteIDs - An array of note IDs to retrieve.
+   * @returns {Promise<NoteDoc[]>} An array of Notes objects corresponding to the given IDs that exist. Ones that don't exist won't return anything.
+   *
+   * @effects returns array of Notes objects corresponding to the given ids that exist. Ones that don't exist won't return anything
+   */
+  public async _getNotesInfo(
+    { noteIDs }: { noteIDs: ID[] },
+  ): Promise<NoteDoc[]> {
+    // Query for all notes whose _id is in the provided array
+    const noteDocs = await this.notes.find({
+      _id: { $in: noteIDs },
+    }).toArray();
+
+    return noteDocs;
+  }
 }
