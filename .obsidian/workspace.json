@@ -83,12 +83,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "design/concepts/FlashCards/api.md",
+                "file": "updatedDesign.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "api"
+              "title": "updatedDesign"
             }
           },
           {
@@ -368,10 +368,17 @@
   },
   "active": "cb259b035aed5e9a",
   "lastOpenFiles": [
-    "design/concepts/Notes/api.md",
-    "design/concepts/FlashCards/api.md",
-    "design/concepts/FlashCards/Flashcards.md",
+    "README.md",
+    "oldREADME.md",
+    "design/background/concept-specifications.md",
     "design/concepts/Notes/Notes.md",
+    "design/concepts/Notes/api.md",
+    "design/concepts/FlashCards/Flashcards.md",
+    "updatedDesign.md",
+    "design/background/concept-design-brief.md",
+    "design/background/concept-design-overview.md",
+    "design/background/implementing-concepts.md",
+    "design/concepts/FlashCards/api.md",
     "design/concepts/UserAuth/UserAuth.md",
     "context/design/concepts/FlashCards/api.md/20251026_105121.7a8eb1a5.md",
     "context/design/concepts/FlashCards/api.md/steps/response.dab31541.md",
@@ -387,14 +394,7 @@
     "context/design/concepts/Following/api.md/steps/prompt.2e341510.md",
     "context/design/concepts/Following/api.md/steps/concept.3012dc87.md",
     "context/design/concepts/Following/api.md/steps/api.d7186e43.md",
-    "context/design/concepts/Following/api.md/steps/_.fa3ad648.md",
-    "context/design/concepts/Following/api.md/steps/_.70b30df5.md",
     "context/design/concepts/Following/api.md/steps",
-    "context/design/concepts/Following/api.md/20251024_131958.df8f0068.md",
-    "context/design/concepts/Following/api.md",
-    "context/design/concepts/Notes/api.md/20251023_150850.f0b9519f.md",
-    "context/design/concepts/Notes/api.md/steps/response.1978e3aa.md",
-    "context/design/concepts/Notes/api.md/20251023_150844.facc3260.md",
     "context/design/concepts/Notes/modifications.md/steps",
     "context/design/concepts/UserAuth/api.md/steps",
     "src/concepts/UserAuth/UserAuthConcept.test.ts",
