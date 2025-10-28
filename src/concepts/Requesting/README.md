@@ -41,10 +41,10 @@ then the body of a request would look like:
 
 ```json
 {
-  author: 'me',
-  title: 'Mangos',
-  scaleMin: 1,
-  scaleMax: 5
+  "author": "me",
+  "title": "Mangos",
+  "scaleMin": 1,
+  "scaleMax": 5
 }
 ```
 
@@ -52,7 +52,7 @@ with a return of:
 
 ```json
 {
-  survey: "019a22d2-e485-71b4-a668-e7d9e8859b15"
+  "survey": "019a22d2-e485-71b4-a668-e7d9e8859b15"
 }
 ```
 
@@ -77,7 +77,7 @@ By default, all concepts and their actions/queries will automatically be discove
 
 Any routes that you **exclude** or do not match a passthrough route will automatically fire a `Request.request` action, and if you've left the default logging setting to `TRACE`, you'll see a recorded trace of this action such as:
 
-```json
+```
 Requesting.request {
   scaleMin: 1,
   scaleMax: 5,
@@ -89,7 +89,7 @@ Requesting.request {
 
 This allows you to synchronize against `Requesting.request` to fire off any other concept actions, and eventually respond with something along the lines of:
 
-```JSON
+```
 Requesting.respond {
   request: '019a22d2-e44d-7f79-be62-92ead8db2d77',
   survey: '019a22d2-e485-71b4-a668-e7d9e8859b15'
