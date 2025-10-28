@@ -14,6 +14,7 @@ import { Button, Counter, Notification } from "@concepts";
 ```
 
 If you have an error in importing your concepts, don't forget to run `deno run build` to automatically prepare the `@concepts` import that will scan your `src/concepts/` directory for your concepts and generate the proper imports.
+
 ## Example
 
 Synchronization code maps directly from their specifications. This synchronization
@@ -29,7 +30,7 @@ can be represented in TypeScript as:
 
 ```typescript
 // Each sync is a function that returns a synchronization record
-const ButtonIncrement: Sync = ({}) => ({
+export const ButtonIncrement: Sync = ({}) => ({
     when: actions(
         [Button.clicked, { kind: "increment_counter" }, {}],
     ),
@@ -39,7 +40,7 @@ const ButtonIncrement: Sync = ({}) => ({
 });
 ```
 
-Each synchronization is a simple function that returns an record with the appropriate keys, minimally containing `when` and `then`. The `actions` helper function enables a shorthand specification of action patterns as an array, where the first argument is the concept action, the second the input pattern, and in the case of the `when` clause, the third is the output pattern.
+Each synchronization is a simple function, exported as a const, that returns an record with the appropriate keys, minimally containing `when` and `then`. The `actions` helper function enables a shorthand specification of action patterns as an array, where the first argument is the concept action, the second the input pattern, and in the case of the `when` clause, the third is the output pattern.
 
 Synchronizations may additionally have a `where` clause and specify variables. Suppose we had a synchronization involving a query on state:
 
@@ -57,7 +58,7 @@ Notice that we now have two variables: `user` and `count`. The `user` variable d
 
 ```typescript
 // Each sync can declare variables by destructuring in the function input
-const NotifyWhenReachTen: Sync = ({ count, user }) => ({
+export const NotifyWhenReachTen: Sync = ({ count, user }) => ({
     when: actions(
         [Button.clicked, { kind: "increment_counter", user }, {}],
         [Counter.increment, {}, {}],
@@ -83,7 +84,7 @@ To understand what is going on step-by-step, suppose a `user = "xavier"` clicks 
 
 ```typescript
 // Suppose we a `user` = "xavier" clicks the button, when `count` = 11
-const NotifyWhenReachTen: Sync = ({ count, user }) => ({
+export const NotifyWhenReachTen: Sync = ({ count, user }) => ({
     when: actions(
         [Button.clicked, { kind: "increment_counter", user }, {}],
         // `user` is now bound to "xavier"
@@ -151,7 +152,7 @@ with the implementation
 
 ```typescript
 // Delete all comments for a post when the post is removed
-const PostCommentDeletion: Sync = ({ post, comment, request }) => ({
+export const PostCommentDeletion: Sync = ({ post, comment, request }) => ({
 	when: actions(
 	    [Requesting.request, { path: "/posts/delete", post }, { request }],
 	    [Post.delete, { post }, { post }],
@@ -178,4 +179,49 @@ flowchart TD
   C2 --> D2["then: Comment.delete({ comment: c2 })"]
   C3 --> D3["then: Comment.delete({ comment: c3 })"]
 ```
+
+## Multiple When Clauses: Handling Request Flow
+
+Some of the previous examples demonstrated **multiple actions in the when clause**. What does this mean? Consider a basic set of synchronizations for the included `LikertSurvey` concept in this repository:
+
+```sync
+sync AddQuestionRequest
+when
+    Requesting.request (path: "/LikertSurvey/addQuestion", survey, text): (request)
+then
+    LikertSurvey.addQuestion (survey, text)
+
+sync AddQuestionResponse
+when
+    Requesting.request (path: "/LikertSurvey/addQuestion") : (request)
+    LikertSurvey.addQuestion () : (question)
+then
+    Requesting.respond (request, question)
+```
+
+with the implementation:
+
+```typescript
+export const AddQuestionRequest: Sync = ({ request, survey, text }) => ({
+  when: actions([
+    Requesting.request,
+    { path: "/LikertSurvey/addQuestion", survey, text },
+    { request },
+  ]),
+  then: actions([LikertSurvey.addQuestion, { survey, text }]),
+});
+
+export const AddQuestionResponse: Sync = ({ request, question }) => ({
+  when: actions(
+    [Requesting.request, { path: "/LikertSurvey/addQuestion" }, { request }],
+    [LikertSurvey.addQuestion, {}, { question }],
+  ),
+  then: actions([Requesting.respond, { request, question }]),
+});
+```
+
+In the response synchronization, we match on the idea that there was some `Requesting.request` in the history of the same **flow**, which gives us the proper binding for `request` to `Requesting.respond` to. The semantics of the engine preserves **flow** as any set of actions that have direct causal relation (i.e. they directly caused one another through syncs), and therefore this will match any `Requesting.request` that led to the `LikertSurvey.addQuestion`. In other words, this allows us to very cleanly and declarative say that "when a request for addQuestion occurs, and the actual LikertSurvey.addQuestion action completes with a return of `question`, respond to the same request with `question`."
+
+> **Partial matching:** notice how we can *omit* whatever parameters we do not care about! For example, in the response synchronization, we do not care about the inputs to `LikertSurvey.addQuestion`, and can completely omit the input pattern. The matching occurs only on a need-basis, and simply matches the keys of whatever pattern we give it.
+
 
