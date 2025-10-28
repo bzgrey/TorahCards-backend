@@ -10,6 +10,8 @@ The concept design approach structures its architecture entirely around two fund
 > **Important:** You should only need to add code within the `src/concepts` and `src/syncs` directories.
 
 ```
+context/
+design/
 src/
 ├── concepts/       <-- YOUR CONCEPTS HERE
 │   ├── Sessioning/
