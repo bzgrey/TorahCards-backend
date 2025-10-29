@@ -11,7 +11,7 @@ import * as concepts from "@concepts";
 const { Engine } = concepts;
 import { Logging } from "@engine";
 import { startRequestingServer } from "@concepts/Requesting/RequestingConcept.ts";
-import { initSynchronizations } from "@utils/init.ts";
+import syncs from "@syncs";
 
 /**
  * Available logging levels:
@@ -22,7 +22,6 @@ import { initSynchronizations } from "@utils/init.ts";
 Engine.logging = Logging.TRACE;
 
 // Register synchronizations
-const syncs = await initSynchronizations();
 Engine.register(syncs);
 
 // Start a server to provide the Requesting concept with external/system actions.
