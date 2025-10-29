@@ -286,4 +286,66 @@ export class Frames<TFrame extends Frame = Frame> extends Array<TFrame> {
     }
     return result;
   }
+  collectAs<
+    TAsSymbol extends symbol,
+  >(
+    collect: symbol[],
+    as: TAsSymbol,
+  ): Frames {
+    // Create a map to group frames by non-collected keys
+    const groups = new Map<
+      string,
+      { groupFrame: Frame; collected: Record<string, unknown>[] }
+    >();
+
+    for (const frame of this) {
+      // Separate collected and non-collected keys
+      const groupKeys: Frame = {};
+      const collectedRecord: Record<string, unknown> = {};
+
+      // Use getOwnPropertySymbols to iterate over symbol keys
+      const symbols = Object.getOwnPropertySymbols(frame);
+
+      for (const symbolKey of symbols) {
+        const value = (frame as Record<symbol, unknown>)[symbolKey];
+
+        if (collect.includes(symbolKey)) {
+          // Convert symbol to string for collected keys
+          const symbolName = symbolKey.description || String(symbolKey);
+          collectedRecord[symbolName] = value;
+        } else {
+          // Keep as symbol for group keys
+          groupKeys[symbolKey] = value;
+        }
+      }
+
+      // Create a stable key for grouping
+      const groupKey = JSON.stringify(
+        Object.getOwnPropertySymbols(groupKeys)
+          .sort((a, b) => String(a).localeCompare(String(b)))
+          .map((sym) => [String(sym), groupKeys[sym]]),
+      );
+
+      if (!groups.has(groupKey)) {
+        groups.set(groupKey, {
+          groupFrame: groupKeys,
+          collected: [],
+        });
+      }
+
+      groups.get(groupKey)!.collected.push(collectedRecord);
+    }
+
+    // Build result frames
+    const result = new Frames();
+    for (const { groupFrame, collected } of groups.values()) {
+      const newFrame = {
+        ...groupFrame,
+        [as]: collected,
+      } as Frame;
+      result.push(newFrame);
+    }
+
+    return result;
+  }
 }

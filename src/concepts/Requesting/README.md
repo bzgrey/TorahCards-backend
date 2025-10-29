@@ -96,4 +96,20 @@ Requesting.respond {
 } => { request: '019a22d2-e44d-7f79-be62-92ead8db2d77' }
 ```
 
+**Important:** Both `Requesting.request` and `Requesting.respond` take *any* parameters as a flat list alongside `path:` and `request:`, meaning in order to call this `Requesting.respond`, you simply have the following `then` clause:
+
+```sync
+then
+  Requesting.respond (request, survey)
+```
+
+or in TypeScript,
+
+```typescript
+{
+  //...
+  then: actions([Requesting.respond, { request, survey }])
+}
+```
+
 See [sample.sync](src/syncs/sample.sync.ts) for example synchronizations that implement a basic request/response cycle that mimics a passthrough route for the `/LikertSurvey/createSurvey` path.
