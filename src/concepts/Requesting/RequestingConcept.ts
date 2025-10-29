@@ -1,4 +1,5 @@
 import { Hono } from "jsr:@hono/hono";
+import { cors } from "jsr:@hono/hono/cors";
 import { Collection, Db } from "npm:mongodb";
 import { freshID } from "@utils/database.ts";
 import { ID } from "@utils/types.ts";
@@ -20,6 +21,10 @@ const REQUESTING_TIMEOUT = parseInt(
   Deno.env.get("REQUESTING_TIMEOUT") ?? "10000",
   10,
 );
+
+// TODO: make sure you configure this environment variable for proper CORS configuration
+const REQUESTING_ALLOWED_DOMAIN = Deno.env.get("REQUESTING_ALLOWED_DOMAIN") ??
+  "*";
 
 // Choose whether or not to persist responses
 const REQUESTING_SAVE_RESPONSES = Deno.env.get("REQUESTING_SAVE_RESPONSES") ??
@@ -187,6 +192,12 @@ export function startRequestingServer(
     throw new Error("Requesting concept missing or broken.");
   }
   const app = new Hono();
+  app.use(
+    "/*",
+    cors({
+      origin: REQUESTING_ALLOWED_DOMAIN,
+    }),
+  );
 
   /**
    * PASSTHROUGH ROUTES
