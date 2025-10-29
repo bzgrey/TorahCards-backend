@@ -105,18 +105,20 @@ export class SyncConcept {
           record,
           sync,
         );
-        this.logFrames(
-          `Matched \`sync\`: ${sync.sync} with \`when\`:`,
-          frames,
-        );
-        if (sync.where !== undefined) {
-          const maybeFrames = sync.where(frames);
-          frames = maybeFrames instanceof Promise
-            ? await maybeFrames
-            : maybeFrames;
-          this.logFrames("After processing \`where\`:", frames);
+        if (frames.length > 0) {
+          this.logFrames(
+            `Matched \`sync\`: ${sync.sync} with \`when\`:`,
+            frames,
+          );
+          if (sync.where !== undefined) {
+            const maybeFrames = sync.where(frames);
+            frames = maybeFrames instanceof Promise
+              ? await maybeFrames
+              : maybeFrames;
+            this.logFrames(`After processing \`where\`:`, frames);
+          }
+          await this.addThen(frames, sync, actionSymbols);
         }
-        await this.addThen(frames, sync, actionSymbols);
       }
     }
   }

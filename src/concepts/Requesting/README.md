@@ -113,3 +113,5 @@ or in TypeScript,
 ```
 
 See [sample.sync](src/syncs/sample.sync.ts) for example synchronizations that implement a basic request/response cycle that mimics a passthrough route for the `/LikertSurvey/createSurvey` path.
+
+> **Important**: the `path` parameter does NOT take into account the base URL, and hence the examples above use "/LikertSurvey/createSurvey" instead of "/api/LikertSurvey/createSurvey". You should take this into account when pattern matching in synchronizations against literal values for the path.
