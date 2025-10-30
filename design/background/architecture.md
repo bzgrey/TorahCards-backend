@@ -62,3 +62,9 @@ const CreatePostOnRequest: Sync = ({ title, content, session, user }) => ({
 ```
 
 By creating the `Sessioning` and `Posting` concepts and including this synchronization, you created an operational and authenticated API endpoint for creating posts. The `Requesting` concept encapsulates the concerns surrounding HTTP requests, and therefore abstracted away the need for specifying a HTTP server, controllers, middleware, etc.
+
+## Initialization
+
+1. Configure any environment variables you need in `.env`
+2. Build command: `deno run build` to scan and automatically generate imports for concepts/syncs.
+3. Start command: `deno run start` to begin your server.
