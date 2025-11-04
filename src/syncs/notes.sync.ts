@@ -78,3 +78,40 @@ export const RemoveNotesError: Sync = ({ request, error }) => ({
   ),
   then: actions([Requesting.respond, { request, error }]),
 });
+
+// -- Syncs for /api/Notes/notesToFlashCards --
+export const NotesToFlashCardsRequestAuth: Sync = (
+  { request, user, name, token },
+) => ({
+  when: actions([
+    Requesting.request,
+    { path: "/Notes/notesToFlashCards", token, user, name },
+    { request },
+  ]),
+  where: async (frames) => {
+    frames = await frames.query(UserAuth._getAuthenticatedUser, { token }, {
+      user,
+    });
+    return frames;
+  },
+  // Pass the user to ensure they own the note set being converted.
+  then: actions([Notes.notesToFlashCards, { user, name }]),
+});
+
+export const NotesToFlashCardsResponse: Sync = (
+  { request, cards },
+) => ({
+  when: actions(
+    [Requesting.request, { path: "/Notes/notesToFlashCards" }, { request }],
+    [Notes.notesToFlashCards, {}, { cards }],
+  ),
+  then: actions([Requesting.respond, { request, cards }]),
+});
+
+export const NotesToFlashCardsError: Sync = ({ request, error }) => ({
+  when: actions(
+    [Requesting.request, { path: "/Notes/notesToFlashCards" }, { request }],
+    [Notes.notesToFlashCards, {}, { error }],
+  ),
+  then: actions([Requesting.respond, { request, error }]),
+});

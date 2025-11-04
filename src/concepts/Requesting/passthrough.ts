@@ -58,7 +58,7 @@ export const exclusions: Array<string> = [
   "/api/Notes/ensureIndexes",
   "/api/Notes/addNotes",
   "/api/Notes/removeNotes",
-  // "/api/Notes/notesToFlashCards",
+  "/api/Notes/notesToFlashCards",
   // "/api/FlashCards/addFlashCards",
   // "/api/FlashCards/removeFlashCards",
   // "/api/FlashCards/addCard",
