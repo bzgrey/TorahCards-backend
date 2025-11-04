@@ -1,12 +1,8 @@
-import { actions, Frames, Sync } from "@engine";
+import { actions, Sync } from "@engine";
 import { Requesting } from "@concepts";
 
 import { Notes } from "@concepts";
-import { FlashCards } from "@concepts";
-import { Following } from "@concepts";
 import { UserAuth } from "@concepts";
-
-type Empty = Record<PropertyKey, never>;
 
 // -- Syncs for /api/Notes/addNotes ---
 export const AddNotesRequestAuth: Sync = (
