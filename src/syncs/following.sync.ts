@@ -1,4 +1,4 @@
-import { actions, Frames, Sync } from "@engine";
+import { actions, Sync } from "@engine";
 import { Requesting } from "@concepts";
 
 import { Following } from "@concepts";
