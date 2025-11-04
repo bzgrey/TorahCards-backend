@@ -221,15 +221,15 @@ export default class UserAuthConcept {
    * **effects** returns an array of dictionaries, each containing the `user` ID associated with the token
    *
    * Retrieves the user ID associated with a given session token.
-   * Returns an array with a single user ID dictionary, or an error if the token is invalid.
+   * Returns an array with a single user ID dictionary.
    */
   async _getAuthenticatedUser(
     { token }: { token: Token },
-  ): Promise<{ user: User }[] | { error: string }> {
+  ): Promise<{ user: User }[]> {
     // Find the token document using its value (which is also its _id)
     const tokenDoc = await this.tokens.findOne({ _id: token });
     if (!tokenDoc) {
-      return { error: "Invalid or expired token" };
+      return []; // Return an empty array if token not found, as per guidelines
     }
     // Return an array with a single dictionary, as per query guidelines
     return [{ user: tokenDoc.user }];

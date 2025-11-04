@@ -26,11 +26,20 @@
 
 export const inclusions: Record<string, string> = {
   // Feel free to delete these example inclusions
-  "/api/LikertSurvey/_getSurveyQuestions": "this is a public query",
-  "/api/LikertSurvey/_getSurveyResponses": "responses are public",
-  "/api/LikertSurvey/_getRespondentAnswers": "answers are visible",
-  "/api/LikertSurvey/submitResponse": "allow anyone to submit response",
-  "/api/LikertSurvey/updateResponse": "allow anyone to update their response",
+  "/api/FlashCards/_getUserCards": "flashcards are public",
+  "/api/Notes/_getUserNotes": "notes are public",
+  "/api/FlashCards/_getCards": "flashcards are public",
+  "/api/Notes/_getNotes": "notes are public",
+  "/api/FlashCards/_searchFlashcards": "flashcards are public",
+  "/api/Notes/_searchNotes": "notes are public",
+  "/api/FlashCards/_getFlashcardInfo": "flashcards are public",
+  "/api/Notes/_getNotesInfo": "notes are public",
+
+  "/api/UserAuth/register": "user registration is public",
+  "/api/UserAuth/login": "user login is public",
+  "/api/UserAuth/logout": "logout takes token as input",
+  "/api/UserAuth/_getUsername": "usernames are public",
+  "/api/UserAuth/_getAuthenticatedUser": "takes token as input",
 };
 
 /**
@@ -45,6 +54,25 @@ export const inclusions: Record<string, string> = {
 
 export const exclusions: Array<string> = [
   // Feel free to delete these example exclusions
-  "/api/LikertSurvey/createSurvey",
-  "/api/LikertSurvey/addQuestion",
+  "/api/FlashCards/ensureIndexes",
+  "/api/Notes/ensureIndexes",
+  "/api/Notes/addNotes",
+  "/api/Notes/removeNotes",
+  // "/api/Notes/notesToFlashCards",
+  // "/api/FlashCards/addFlashCards",
+  // "/api/FlashCards/removeFlashCards",
+  // "/api/FlashCards/addCard",
+  // "/api/FlashCards/removeCard",
+  // "/api/Notes/parseLLMToFlashcards",
+  // "/api/Notes/createLLMPrompt",
+  // "/api/Following/follow",
+  // "/api/Following/unfollow",
+  // "/api/Following/_getFollowedItems",
+  // "/api/Labeling/createLabel",
+  // "/api/Labeling/deleteLabel",
+  // "/api/Labeling/addLabel",
+  // "/api/Labeling/deleteItem",
+  // "/api/Labeling/_getLabelItems",
+  // "/api/Labeling/_getItemLabels",
+  // "/api/UserAuth/_getPassword",
 ];

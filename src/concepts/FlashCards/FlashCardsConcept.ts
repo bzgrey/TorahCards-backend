@@ -51,7 +51,7 @@ export default class FlashCardsConcept {
   }
 
   // Ensure indexes exist; cached to avoid repeated work / races
-  public ensureIndexes(): Promise<void> {
+  private ensureIndexes(): Promise<void> {
     if (!this.indexInit) {
       this.indexInit = (async () => {
         await Promise.all([
