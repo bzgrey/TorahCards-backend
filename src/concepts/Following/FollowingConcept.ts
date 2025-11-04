@@ -117,6 +117,7 @@ export default class FollowingConcept {
   async _getFollowedItems(
     { user }: { user: User },
   ): Promise<Array<{ item: Item }>> {
+    console.log("Getting followed items for user:", user);
     const userDoc = await this.users.findOne({ _id: user });
     if (userDoc) {
       return (userDoc.followedItems || []).map((item) => ({ item })); // Return array of objects

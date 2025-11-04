@@ -6,6 +6,7 @@ import type { Sync } from "@engine";
 
 import * as sync_flashcards from "./flashcards.sync.ts";
 import * as sync_notes from "./notes.sync.ts";
+import * as sync_following from "./following.sync.ts";
 
 const allSyncs: Record<string, Sync> = {};
 
@@ -18,6 +19,11 @@ for (const [name, func] of Object.entries(sync_flashcards)) {
 for (const [name, func] of Object.entries(sync_notes)) {
   if (typeof func === "function") {
     allSyncs[`notes.${name}`] = func as Sync;
+  }
+}
+for (const [name, func] of Object.entries(sync_following)) {
+  if (typeof func === "function") {
+    allSyncs[`following.${name}`] = func as Sync;
   }
 }
 
