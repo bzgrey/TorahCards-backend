@@ -1,4 +1,4 @@
-import { actions, Sync } from "@engine";
+import { actions, Frames, Sync } from "@engine";
 import { Requesting } from "@concepts";
 
 import { Following } from "@concepts";
@@ -87,6 +87,7 @@ export const GetFollowedItemsRequestAuth: Sync = (
     { request },
   ]),
   where: async (frames) => {
+    const originalFrame = frames[0];
     // First, authenticate the user to get their ID.
     frames = await frames.query(UserAuth._getAuthenticatedUser, { token }, {
       user,
@@ -98,6 +99,12 @@ export const GetFollowedItemsRequestAuth: Sync = (
       { user },
       { item },
     );
+
+    if (frames.length === 0) {
+      const response = { ...originalFrame, [results]: [] };
+      // Note the additional import `Frames` available from @engine
+      return new Frames(response);
+    }
 
     return frames.collectAs([item], results);
   },
