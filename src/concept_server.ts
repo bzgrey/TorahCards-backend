@@ -32,7 +32,7 @@ async function main() {
       origin: [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "https://torahcards.onrender.com",
+        // "https://torahcards.onrender.com",
       ],
       allowMethods: ["POST"],
       allowHeaders: ["Content-Type"],
