@@ -7,7 +7,7 @@ A concept-driven backend API server built with [Deno](https://deno.com) and [Hon
 TorahCards is a backend system designed around the concept design methodology from MIT 6.104. The application provides a RESTful API for managing flashcards, notes, user authentication, following relationships, through independently implemented "concepts."
 
 ## assignment 4c links:
-- [Screen Recording](Final-Screen-Recording.mov)
+- [Screen Recording](https://drive.google.com/file/d/1QqvTJ_1U7pjr3x1xZSR7JK0qvD9xgUxE/view?usp=sharing)
 - [Screen Recording Trace](Screen-Recording-trace.md)
 - [Final Design Doc](FinalDesignDoc.md)
 - [Reflections Document](reflections.md)
