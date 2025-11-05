@@ -117,15 +117,9 @@ export default class FollowingConcept {
   async _getFollowedItems(
     { user }: { user: User },
   ): Promise<Array<{ item: Item }>> {
-    console.log("Getting followed items for user:", user);
     const userDoc = await this.users.findOne({ _id: user });
 
-    console.log("Found user document:", userDoc);
     if (userDoc) {
-      console.log(
-        "test userdoc: ",
-        (userDoc.followedItems || []).map((item) => ({ item })),
-      );
       return (userDoc.followedItems || []).map((item) => ({ item })); // Return array of objects
     }
     return []; // User not found, so they follow no items
